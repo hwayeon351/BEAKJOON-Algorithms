@@ -2,110 +2,93 @@
 //  main.cpp
 //  BJ14502
 //
-//  Created by Hwayeon on 2020/12/16.
+//  Created by Hwayeon on 2021/01/09.
 //
-
 #include <iostream>
+#include <queue>
 #include <vector>
 using namespace std;
 
-int N, M;
-int max_area = 0;
-int lab[8][8] = {-1,};
+int N,M;
+int map[8][8] = {1,};
+int map_copy[8][8] = {0,};
+int dx[4] = {-1, 0, 1, 0};
+int dy[4] = {0, -1, 0, 1};
+int max_safe_area = 0;
 struct location{
     int x;
     int y;
 };
+location loc;
 vector<location> virus;
-vector<location> init;
-int dx[4] = {-1, 0, 1, 0};
-int dy[4] = {0, -1, 0 ,1};
 
-
-void print_lab(){
-    for(int y=0; y<N; y++){
-        for(int x=0; x<M; x++){
-            cout << lab[y][x];
-        }
-        cout << endl;
+void spread_virus(){
+    queue<location> q;
+    int safe_area = 0;
+    for(int i=0; i<virus.size(); i++){
+        q.push(virus[i]);
     }
-}
-
-int check_safe_area(){
-    int virus = 0, wall = 0;
-    for(int y=0; y<N; y++){
-        for(int x=0; x<M; x++){
-            if(lab[y][x]==2) virus++;
-            else if(lab[y][x]==1) wall++;
-        }
-    }
-    return N * M - (virus + wall);
-}
-
-void init_lab(){
-    for(int i=0; i<init.size(); i++){
-        lab[init[i].y][init[i].x] = 0;
-    }
-    init.clear();
-}
-
-int spread_virus(){
-    bool visit[8][8] = {false,};
-    int area = 0;
-    while(virus.size()>0){
-        int x = virus.back().x;
-        int y = virus.back().y;
-        virus.pop_back();
-        visit[y][x] = true;
+    while(!q.empty()){
+        int v_x = q.front().x;
+        int v_y = q.front().y;
+        q.pop();
         for(int d=0; d<4; d++){
-            int nx = x+dx[d];
-            int ny = y+dy[d];
-            if((lab[ny][nx] == 1)||(nx<0 || nx>=M) || (ny<0 || ny>=N) || (visit[ny][nx]==true)) continue;
-            lab[ny][nx] = 2;
-            location new_v;
-            new_v.x = nx;
-            new_v.y = ny;
-            virus.push_back(new_v);
-            init.push_back(new_v);
-        }
-    }
-    area = check_safe_area();
-    init_lab();
-    return area;
-}
-
-void install_wall(int cnt){
-    if(cnt>=3){
-        int area = spread_virus();
-        if(area > max_area) max_area = area;
-        return;
-    }
-    for(int y=0; y<N; y++){
-        for(int x=0; x<M; x++){
-            if(lab[y][x] == 0){
-                lab[y][x] = 1;
-                install_wall(cnt+1);
-                lab[y][x] = 0;
+            int new_x = v_x+dx[d];
+            int new_y = v_y+dy[d];
+            if(new_x<0 || new_x>=N || new_y<0 || new_y>=M) continue;
+            if(map_copy[new_x][new_y] == 0){
+                map_copy[new_x][new_y] = 2;
+                loc.x = new_x;
+                loc.y = new_y;
+                q.push(loc);
             }
         }
     }
+    for(int i=0; i<N; i++){
+        for(int j=0; j<M; j++){
+            if(map_copy[i][j]==0) safe_area++;
+        }
+    }
+    if(safe_area > max_safe_area) max_safe_area = safe_area;
+    return;
+}
 
+void install_wall(int wall){
+    if(wall == 3){
+        for(int i=0; i<N; i++){
+            for(int j=0; j<M; j++){
+                map_copy[i][j] = map[i][j];
+            }
+        }
+        spread_virus();
+        return;
+    }
+    for(int i=0; i<N; i++){
+        for(int j=0; j<M; j++){
+            if(map[i][j] == 0){
+                map[i][j] = 1;
+                install_wall(wall+1);
+                map[i][j] = 0;
+            }
+        }
+    }
 }
 
 int main(int argc, const char * argv[]) {
     cin >> N >> M;
-    for(int y=0; y<N; y++){
-        for(int x=0; x<M; x++){
-            cin >> lab[y][x];
-            if(lab[y][x]==2){
-                location loc;
-                loc.x = x;
-                loc.y = y;
+    for(int i=0; i<N; i++){
+        for(int j=0; j<M; j++){
+            cin >> map[i][j];
+            if(map[i][j] == 0) continue;
+            else if(map[i][j] == 2){
+                loc.x = i;
+                loc.y = j;
                 virus.push_back(loc);
             }
         }
     }
-    install_wall(1);
-    cout << max_area;
+    install_wall(0);
+    cout << max_safe_area <<endl;
+    
     return 0;
 }
