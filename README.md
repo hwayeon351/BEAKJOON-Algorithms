@@ -23,5 +23,5 @@ BJ14890 경사로 -> https://hwayomingdlog.tistory.com/20
 
 BJ14891 톱니바퀴 -> https://hwayomingdlog.tistory.com/31
 
-BJ13458 시험 감독 -> 
+BJ13458 시험 감독 -> https://hwayomingdlog.tistory.com/60
 
