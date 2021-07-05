@@ -23,7 +23,7 @@ void consult(int i, int pay, int day){
         cout << "finish money = " << money << endl;
         return;
     }
-    if((day+T[i]<=N || day == 0) && (i+1+T[i]<=N+1)) consult(T[i]+i, pay+P[i], day+T[i]);
+    if((day+T[i]<=N) && (i+1+T[i]<=N+1)) consult(T[i]+i, pay+P[i], day+T[i]);
     consult(i+1, pay, day);
     return;
 }
