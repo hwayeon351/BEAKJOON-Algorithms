@@ -25,4 +25,4 @@ BJ14891 톱니바퀴 -> https://hwayomingdlog.tistory.com/31
 
 BJ13458 시험 감독 -> https://hwayomingdlog.tistory.com/60
 
-BJ14501 퇴사 -> 
+BJ14501 퇴사 -> https://hwayomingdlog.tistory.com/66
