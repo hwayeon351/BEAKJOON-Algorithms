@@ -2,66 +2,54 @@
 //  main.cpp
 //  BJ14889
 //
-//  Created by Hwayeon on 2021/01/06.
+//  Created by Hwayeon on 2021/07/07.
 //
 
 #include <iostream>
-#include <vector>
 #include <cmath>
 using namespace std;
 
-int N, start_s, link_s;
-vector<vector<int> > s;
-int min_ds = 987654321;
-vector<int> start_team, link_team;
-bool visit[20] = {false,};
+int N;
+int S[20][20] = {0, };
+int visit[20] = {0,};
+int answer = 987654321;
 
-void get_ds(){
-    link_team.clear();
-    start_s = 0;
-    link_s = 0;
-    for(int i=0; i<N; i++){
-        if(!visit[i]) link_team.push_back(i);
-    }
-    for(int i=0; i<N/2; i++){
-        for(int j=0; j<N/2; j++){
-            start_s += s[start_team[i]][start_team[j]];
-            link_s += s[link_team[i]][link_team[j]];
+void dfs(int idx, int start_n){
+    if(idx >= N) return;
+    //팀 배정 완료
+    if(start_n == N/2){
+        //능력치 구하기
+        int start_sum = 0;
+        int link_sum = 0;
+        for(int i=0; i<N; i++){
+            for(int j=0; j<N; j++){
+                if(visit[i]+visit[j]==2) start_sum += S[i][j];
+                else if(visit[i]+visit[j]==0) link_sum += S[i][j];
+            }
         }
-    }
-    if(abs(start_s-link_s) < min_ds) min_ds = abs(start_s-link_s);
-}
-
-void make_start_team(int idx){
-    if(start_team.size() == N/2) {
-        get_ds();
+        int differ = abs(start_sum-link_sum);
+        if(differ < answer) answer = differ;
         return;
     }
-    int n;
-    for(n=idx; n<N; n++){
-        if(visit[n]) continue;
-        visit[n] = true;
-        start_team.push_back(n);
-        make_start_team(n);
-        visit[n] = false;
-        start_team.pop_back();
+    
+    //팀원 뽑기
+    for(int i=idx; i<N; i++){
+        if(start_n+1<=N/2){
+            visit[i] = 1;
+            dfs(i+1, start_n+1);
+            visit[i] = 0;
+        }
     }
 }
-
+    
 int main(int argc, const char * argv[]) {
     cin >> N;
-    vector<int> row;
     for(int i=0; i<N; i++){
-        row.clear();
         for(int j=0; j<N; j++){
-            int s_num;
-            cin >> s_num;
-            row.push_back(s_num);
+            cin >> S[i][j];
         }
-        s.push_back(row);
     }
-    make_start_team(0);
-    cout << min_ds << endl;
-
+    dfs(0, 0);
+    cout << answer << endl;
     return 0;
 }
