@@ -13,7 +13,7 @@ BJ13460 구슬 탈출 2 -> https://hwayomingdlog.tistory.com/25
 
 BJ14502 연구소 -> https://hwayomingdlog.tistory.com/11
 
-BJ14503 로봇 청소기 -> https://hwayomingdlog.tistory.com/10?category=939393
+BJ14503 로봇 청소기 -> https://hwayomingdlog.tistory.com/10
 
 BJ14888 연산자 끼워넣기 -> https://hwayomingdlog.tistory.com/24
 
