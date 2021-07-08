@@ -2,51 +2,53 @@
 //  main.cpp
 //  BJ14888
 //
-//  Created by Hwayeon on 2021/01/17.
+//  Created by Hwayeon on 2021/07/09.
 //
 
 #include <iostream>
 using namespace std;
 
 int N;
-int num[11] = {0, };
-int op[4] = {0, };
-long max_anwer = -9999999999;
-long min_answer = 9999999999;
+int num[100] = {0,};
+//1 +, 2 -, 3 *, 4 //
+int op_cnt[5] = {0,};
+int op[100] = {0,};
 
-void calculate(int idx, long answer){
-    if(idx == N-1){
-        if(answer < min_answer) min_answer = answer;
-        if(answer > max_anwer) max_anwer = answer;
-        return;
-    }
-    int n1 = num[idx];
-    int n = num[idx+1];
-    long ans = 0;
-    for(int i=0; i<4; i++){
-        if(op[i] > 0){
-            switch (i) {
-                case 0:
-                    if(idx == 0) ans = n1 + n;
-                    else ans = n + answer;
-                    break;
+long long max_result = -1000000000;
+long long min_result = 1000000000;
+
+void dfs(int cnt){
+    if(cnt == N-1){
+        //결과 값 구하기
+        int result = num[0];
+        for(int i=1; i<N; i++){
+            switch(op[i]){
                 case 1:
-                    if(idx == 0) ans = n1 - n;
-                    else ans = answer - n;
+                    result += num[i];
                     break;
                 case 2:
-                    if(idx == 0) ans = n1 * n;
-                    else ans = answer * n;
+                    result -= num[i];
                     break;
                 case 3:
-                    if(idx == 0) ans = n1 / n;
-                    else ans = answer / n;
+                    result *= num[i];
                     break;
-
+                case 4:
+                    result /= num[i];
+                    break;
             }
-            op[i]--;
-            calculate(idx+1, ans);
-            op[i]++;
+        }
+        //cout << result << endl;
+        if(result > max_result) max_result = result;
+        if(result < min_result) min_result = result;
+        return;
+    }
+    for(int i=1; i<=4; i++){
+        if(op_cnt[i] > 0){
+            op_cnt[i]--;
+            op[cnt+1] = i;
+            dfs(cnt+1);
+            op_cnt[i]++;
+            op[cnt+1] = 0;
         }
     }
 }
@@ -56,11 +58,11 @@ int main(int argc, const char * argv[]) {
     for(int i=0; i<N; i++){
         cin >> num[i];
     }
-    for(int i=0; i<4; i++){
-        cin >> op[i];
+    for(int i=1; i<=4; i++){
+        cin >> op_cnt[i];
     }
-    calculate(0, 0);
-    cout << max_anwer << endl << min_answer << endl;
-    
+    dfs(0);
+    cout << max_result << endl;
+    cout << min_result << endl;
     return 0;
 }
