@@ -31,4 +31,4 @@ BJ20055 컨베이어 벨트 위의 로봇 -> https://hwayomingdlog.tistory.com/7
 
 BJ21608 상어 초등학교 -> https://hwayomingdlog.tistory.com/86
 
-BJ3190 뱀 -> 
+BJ3190 뱀 -> https://hwayomingdlog.tistory.com/90
