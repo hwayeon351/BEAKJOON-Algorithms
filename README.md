@@ -33,6 +33,6 @@ BJ21608 상어 초등학교 -> https://hwayomingdlog.tistory.com/86
 
 BJ3190 뱀 -> https://hwayomingdlog.tistory.com/90
 
-BJ14499 주사위 굴리기 -> 
+BJ14499 주사위 굴리기 -> https://hwayomingdlog.tistory.com/95
 
-BJ14500 테트로미노 ->
+BJ14500 테트로미노 -> https://hwayomingdlog.tistory.com/96
