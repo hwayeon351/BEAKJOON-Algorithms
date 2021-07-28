@@ -2,53 +2,76 @@
 //  main.cpp
 //  BJ14503
 //
-//  Created by Hwayeon on 2021/01/10.
+//  Created by Hwayeon on 2021/07/29.
 //
+
 #include <iostream>
-#include <cmath>
 using namespace std;
 
-int N, M, d, r_x, r_y;
+int N, M;
+int map[50][50] = {0,};
+
+struct robots{
+    int d;
+    int x;
+    int y;
+};
+robots robot;
+
+//상 우 하 좌
 int dx[4] = {0, 1, 0, -1};
 int dy[4] = {-1, 0, 1, 0};
-int back[4] = {2, 3, 0, 1};
-int room[50][50];
-bool clean[50][50] = {false,};
-int cleaned_area = 0;
 
-void cal_clean_area(){
-    for(int i=0; i<N; i++){
-        for(int j=0; j<M; j++){
-            if(clean[i][j]) cleaned_area++;
+int clean_area = 0;
+
+void clean(){
+    while(true){
+        //1. 현재 위치 청소
+        if(map[robot.y][robot.x] == 0){
+            map[robot.y][robot.x] = 2;
+            clean_area++;
+        }
+        
+        //2.
+        bool check = false;
+        for(int i=0; i<4; i++){
+            int next_d = (4 + robot.d-1) % 4;
+            int nx = robot.x + dx[next_d];
+            int ny = robot.y + dy[next_d];
+            //2-a
+            if(map[ny][nx] == 0){
+                robot.d = next_d;
+                robot.x = nx;
+                robot.y = ny;
+                check = true;
+                break;
+            }
+            //2-b
+            robot.d = next_d;
+        }
+        if(!check){
+            int back_d = (4 + robot.d-2) % 4;
+            int back_x = robot.x + dx[back_d];
+            int back_y = robot.y + dy[back_d];
+            if(map[back_y][back_x] != 1){
+                robot.x = back_x;
+                robot.y = back_y;
+            }
+            //2-d
+            else return;
         }
     }
-}
-
-void clean_room(int x, int y, int dir){
-    if(clean[y][x] == false) clean[y][x] = true;
-    for(int i=1; i<=4; i++){
-        int left = (dir-i+4)%4;
-        int new_x = x+dx[left];
-        int new_y = y+dy[left];
-        if(room[new_y][new_x] == 0 && clean[new_y][new_x] == false){
-            clean_room(new_x, new_y, left);
-            return;
-        }
-    }
-    if(room[y+dy[back[dir]]][x+dx[back[dir]]] == 0) clean_room(x+dx[back[dir]], y+dy[back[dir]], dir);
-    else if(room[y+dy[back[dir]]][x+dx[back[dir]]] == 1) cal_clean_area();
 }
 
 int main(int argc, const char * argv[]) {
     cin >> N >> M;
-    cin >> r_y >> r_x >> d;
+    cin >> robot.y >> robot.x >> robot.d;
     for(int i=0; i<N; i++){
         for(int j=0; j<M; j++){
-            cin >> room[i][j];
+            cin >> map[i][j];
         }
     }
-    clean_room(r_x, r_y, d);
-    cout << cleaned_area << endl;
-    
+    clean();
+    cout << clean_area << endl;
     return 0;
 }
