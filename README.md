@@ -7,7 +7,12 @@
 https://hwayomingdlog.tistory.com/category/코테%20노트/백준
 
 
-[문제별 풀이]
+[DP 알고리즘 문제 풀이]
+
+BJ31797673 1로 만들기 -> 
+
+
+[삼성 SW 역량 테스트 기출 문제]
 
 BJ13460 구슬 탈출 2 -> https://hwayomingdlog.tistory.com/25
 
@@ -37,4 +42,4 @@ BJ14499 주사위 굴리기 -> https://hwayomingdlog.tistory.com/95
 
 BJ14500 테트로미노 -> https://hwayomingdlog.tistory.com/96
 
-BJ15683 감시 -> 
+BJ15683 감시 -> https://hwayomingdlog.tistory.com/107
