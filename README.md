@@ -9,7 +9,7 @@ https://hwayomingdlog.tistory.com/category/코테%20노트/백준
 
 [DP 알고리즘 문제 풀이]
 
-BJ31797673 1로 만들기 -> 
+BJ1463 1로 만들기 -> 
 
 
 [삼성 SW 역량 테스트 기출 문제]
