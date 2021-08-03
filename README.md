@@ -5,13 +5,13 @@
 [풀이 노트]
 
 https://hwayomingdlog.tistory.com/category/코테%20노트/백준
-
+</br>
 
 [DP 알고리즘 문제 풀이]
 
-BJ1463 1로 만들기 -> 
+BJ1463 1로 만들기 -> https://hwayomingdlog.tistory.com/108
 
-
+</br>
 [삼성 SW 역량 테스트 기출 문제]
 
 BJ13460 구슬 탈출 2 -> https://hwayomingdlog.tistory.com/25
