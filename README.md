@@ -11,6 +11,8 @@ https://hwayomingdlog.tistory.com/category/코테%20노트/백준
 
 BJ1463 1로 만들기 -> https://hwayomingdlog.tistory.com/108
 
+BJ9095 1, 2, 3 더하기 -> 
+
 </br>
 [삼성 SW 역량 테스트 기출 문제]
 
@@ -44,4 +46,4 @@ BJ14500 테트로미노 -> https://hwayomingdlog.tistory.com/96
 
 BJ15683 감시 -> https://hwayomingdlog.tistory.com/107
 
-BJ15686 치킨 배달 -> 
+BJ15686 치킨 배달 -> https://hwayomingdlog.tistory.com/109
