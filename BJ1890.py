@@ -17,5 +17,4 @@ for i in range(n):
 dp = [[0]*n for i in range(n)]
 dp[0][0] = 1
 find_route(board, dp)
-print(dp)
 print(dp[-1][-1])
