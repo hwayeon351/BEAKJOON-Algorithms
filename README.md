@@ -13,7 +13,7 @@ BJ1463 1로 만들기 -> https://hwayomingdlog.tistory.com/108
 
 BJ9095 1, 2, 3 더하기 -> https://hwayomingdlog.tistory.com/110
 
-BJ1890 점프 -> 
+BJ1890 점프 -> https://hwayomingdlog.tistory.com/111
 
 </br>
 [삼성 SW 역량 테스트 기출 문제]
@@ -50,4 +50,4 @@ BJ15683 감시 -> https://hwayomingdlog.tistory.com/107
 
 BJ15686 치킨 배달 -> https://hwayomingdlog.tistory.com/109
 
-BJ16234 인구 이동 -> 
+BJ16234 인구 이동 -> https://hwayomingdlog.tistory.com/112
