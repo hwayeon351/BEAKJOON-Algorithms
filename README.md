@@ -15,6 +15,8 @@ BJ9095 1, 2, 3 더하기 -> https://hwayomingdlog.tistory.com/110
 
 BJ1890 점프 -> https://hwayomingdlog.tistory.com/111
 
+BJ2565 전깃줄 -> 
+
 </br>
 [삼성 SW 역량 테스트 기출 문제]
 
