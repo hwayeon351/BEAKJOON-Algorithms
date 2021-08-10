@@ -11,7 +11,7 @@
 using namespace std;
 
 int N, M;
-//1 <= y,x <= N
+//1 <= x,y <= N
 int A[51][51] = {0, };
 int dx[9] = {0, -1, -1, 0, 1, 1, 1, 0, -1};
 int dy[9] = {0, 0, -1, -1, -1, 0, 1, 1, 1};
@@ -19,7 +19,6 @@ vector<pair<int, int>> cmd;
 //비바라기 시전 비구름 초기화
 deque<pair<int, int>> cloud = {{1, N}, {2, N}, {1, N-1}, {2, N-1}};
 vector<pair<int, int>> basket;
-int cloud_v[51][51] = {0, };
 int d, s;
 
 void move_cloud(int c){
