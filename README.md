@@ -19,7 +19,7 @@ BJ2565 전깃줄 -> https://hwayomingdlog.tistory.com/114
 
 BJ1309 동물원 -> https://hwayomingdlog.tistory.com/115
 
-BJ1092 배 -> 
+BJ1092 배 -> https://hwayomingdlog.tistory.com/117
 
 
 </br>
