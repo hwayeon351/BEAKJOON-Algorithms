@@ -21,6 +21,7 @@ BJ1309 동물원 -> https://hwayomingdlog.tistory.com/115
 
 BJ1092 배 -> https://hwayomingdlog.tistory.com/117
 
+BJ13904 과제 -> 
 
 </br>
 [삼성 SW 역량 테스트 기출 문제]
