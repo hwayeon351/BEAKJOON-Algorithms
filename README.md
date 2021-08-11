@@ -61,6 +61,9 @@ BJ16234 인구 이동 -> https://hwayomingdlog.tistory.com/112
 
 BJ17144 미세먼지 안녕! -> https://hwayomingdlog.tistory.com/113
 
+BJ21610 마법사 상어와 비바라기 -> https://hwayomingdlog.tistory.com/116
+
+BJ15684 사다리 조작 -> 
+
 BJ20056 마법사 상어와 파이어볼 ->
 
-BJ21610 마법사 상어와 비바라기 -> https://hwayomingdlog.tistory.com/116
