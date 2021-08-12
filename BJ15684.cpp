@@ -40,10 +40,11 @@ void install_line(int cnt, int n, int row, int col){
         return;
     }
     for(int r=row; r<=H; r++){
-        for(int c=1; c<=N; c++){
+        if(r > row) col = 1;
+        for(int c=col; c<=N; c++){
             if(ladder[r][c]==0 && ladder[r][c-1] == 0 && ladder[r][c+1] == 0){
                 ladder[r][c] = 1;
-                install_line(cnt+1, n, r, c);
+                install_line(cnt+1, n, r, c+2);
                 ladder[r][c] = 0;
             }
         }
