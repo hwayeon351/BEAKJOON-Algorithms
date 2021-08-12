@@ -23,6 +23,8 @@ BJ1092 배 -> https://hwayomingdlog.tistory.com/117
 
 BJ13904 과제 -> https://hwayomingdlog.tistory.com/119
 
+BJ8980 택배 -> 
+
 </br>
 [삼성 SW 역량 테스트 기출 문제]
 
@@ -65,6 +67,8 @@ BJ17144 미세먼지 안녕! -> https://hwayomingdlog.tistory.com/113
 BJ21610 마법사 상어와 비바라기 -> https://hwayomingdlog.tistory.com/116
 
 BJ15684 사다리 조작 -> https://hwayomingdlog.tistory.com/118
+
+BJ15685 드래곤 커브 -> 
 
 BJ20056 마법사 상어와 파이어볼 -> 
 
