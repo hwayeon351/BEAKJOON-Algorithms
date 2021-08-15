@@ -25,7 +25,7 @@ BJ13904 과제 -> https://hwayomingdlog.tistory.com/119
 
 BJ8980 택배 -> https://hwayomingdlog.tistory.com/121
 
-BJ11501 주식 -> 
+BJ11501 주식 -> https://hwayomingdlog.tistory.com/125
 
 </br>
 [삼성 SW 역량 테스트 기출 문제]
