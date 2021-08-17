@@ -74,7 +74,7 @@ BJ15685 드래곤 커브 -> https://hwayomingdlog.tistory.com/120
 
 BJ16235 나무 재테크 -> https://hwayomingdlog.tistory.com/124
 
-BJ17140 이차원 배열과 연산 -> 
+BJ17140 이차원 배열과 연산 -> https://hwayomingdlog.tistory.com/126
 
 BJ20056 마법사 상어와 파이어볼 -> 
 
