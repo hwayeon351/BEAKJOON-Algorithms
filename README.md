@@ -19,6 +19,8 @@ BJ2565 전깃줄 -> https://hwayomingdlog.tistory.com/114
 
 BJ1309 동물원 -> https://hwayomingdlog.tistory.com/115
 
+
+[Greedy 알고리즘 문제 풀이]
 BJ1092 배 -> https://hwayomingdlog.tistory.com/117
 
 BJ13904 과제 -> https://hwayomingdlog.tistory.com/119
@@ -26,6 +28,11 @@ BJ13904 과제 -> https://hwayomingdlog.tistory.com/119
 BJ8980 택배 -> https://hwayomingdlog.tistory.com/121
 
 BJ11501 주식 -> https://hwayomingdlog.tistory.com/125
+
+
+[DFS/BFS 알고리즘 문제 풀이]
+BJ11725 트리의 부모 찾기 -> 
+
 
 </br>
 [삼성 SW 역량 테스트 기출 문제]
