@@ -31,7 +31,7 @@ BJ11501 주식 -> https://hwayomingdlog.tistory.com/125
 
 
 [DFS/BFS 알고리즘 문제 풀이]
-BJ11725 트리의 부모 찾기 -> 
+BJ11725 트리의 부모 찾기 -> https://hwayomingdlog.tistory.com/127
 
 
 </br>
