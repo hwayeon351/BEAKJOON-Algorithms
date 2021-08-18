@@ -89,7 +89,7 @@ BJ16235 나무 재테크 -> https://hwayomingdlog.tistory.com/124
 
 BJ17140 이차원 배열과 연산 -> https://hwayomingdlog.tistory.com/126
 
-BJ17142 연구소 3 -> 
+BJ17142 연구소 3 -> https://hwayomingdlog.tistory.com/130
 
 BJ20056 마법사 상어와 파이어볼 -> 
 
