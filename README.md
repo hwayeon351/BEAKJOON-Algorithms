@@ -23,6 +23,7 @@ BJ11659 구간 합 구하기 4 ->
 
 
 [Greedy 알고리즘 문제 풀이]
+
 BJ1092 배 -> https://hwayomingdlog.tistory.com/117
 
 BJ13904 과제 -> https://hwayomingdlog.tistory.com/119
@@ -33,6 +34,7 @@ BJ11501 주식 -> https://hwayomingdlog.tistory.com/125
 
 
 [DFS/BFS 알고리즘 문제 풀이]
+
 BJ11725 트리의 부모 찾기 -> https://hwayomingdlog.tistory.com/127
 
 BJ1325 효율적인 해킹 -> 
