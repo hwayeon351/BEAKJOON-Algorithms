@@ -12,7 +12,7 @@ using namespace std;
 int N;
 int A[101][101] = {0, };
 int area[101][101] = {0, };
-int popluation[6] = {0, };
+int population[6] = {0, };
 int max_A = 0;
 int min_A = 400001;
 int min_differ = 400001;
@@ -27,12 +27,12 @@ void make_district1(){
         for(int y=1; y<=py; y++){
             if(area[x][y] == 0){
                 area[x][y] = 1;
-                popluation[1] += A[x][y];
+                population[1] += A[x][y];
             }
         }
     }
-    if(popluation[1] > max_A) max_A = popluation[1];
-    if(popluation[1] < min_A) min_A = popluation[1];
+    if(population[1] > max_A) max_A = population[1];
+    if(population[1] < min_A) min_A = population[1];
 }
 
 void make_district2(){
@@ -40,12 +40,12 @@ void make_district2(){
         for(int y=py+1; y<=N; y++){
             if(area[x][y] == 0){
                 area[x][y] = 2;
-                popluation[2] += A[x][y];
+                population[2] += A[x][y];
             }
         }
     }
-    if(popluation[2] > max_A) max_A = popluation[2];
-    if(popluation[2] < min_A) min_A = popluation[2];
+    if(population[2] > max_A) max_A = population[2];
+    if(population[2] < min_A) min_A = population[2];
 }
 
 void make_district3(){
@@ -53,12 +53,12 @@ void make_district3(){
         for(int y=1; y<py-d1+d2; y++){
             if(area[x][y] == 0){
                 area[x][y] = 3;
-                popluation[3] += A[x][y];
+                population[3] += A[x][y];
             }
         }
     }
-    if(popluation[3] > max_A) max_A = popluation[3];
-    if(popluation[3] < min_A) min_A = popluation[3];
+    if(population[3] > max_A) max_A = population[3];
+    if(population[3] < min_A) min_A = population[3];
 }
 
 void make_district4(){
@@ -66,19 +66,19 @@ void make_district4(){
         for(int y=py-d1+d2; y<=N; y++){
             if(area[x][y] == 0){
                 area[x][y] = 4;
-                popluation[4] += A[x][y];
+                population[4] += A[x][y];
             }
         }
     }
-    if(popluation[4] > max_A) max_A = popluation[4];
-    if(popluation[4] < min_A) min_A = popluation[4];
+    if(population[4] > max_A) max_A = population[4];
+    if(population[4] < min_A) min_A = population[4];
 }
 
 //dfs
 void make_district5(int x, int y){
     if(area[x][y]==0){
         area[x][y] = 5;
-        popluation[5] += A[x][y];
+        population[5] += A[x][y];
     }
     for(int i=0; i<4; i++){
         int nx = x+dx[i];
@@ -89,14 +89,14 @@ void make_district5(int x, int y){
 
 void make_border(){
     memset(area, 0, sizeof(area));
-    memset(popluation, 0, sizeof(popluation));
+    memset(population, 0, sizeof(population));
     //1.
     int nx, ny;
     for(int d=0; d<=d1; d++){
         nx = px + d;
         ny = py - d;
         area[nx][ny] = 5;
-        popluation[5] += A[nx][ny];
+        population[5] += A[nx][ny];
     }
     //2.
     for(int d=0; d<=d2; d++){
@@ -104,7 +104,7 @@ void make_border(){
         ny = py + d;
         if(area[nx][ny] == 0){
             area[nx][ny] = 5;
-            popluation[5] += A[nx][ny];
+            population[5] += A[nx][ny];
         }
     }
     //3.
@@ -113,7 +113,7 @@ void make_border(){
         ny = py - d1 + d;
         if(area[nx][ny] == 0){
             area[nx][ny] = 5;
-            popluation[5] += A[nx][ny];
+            population[5] += A[nx][ny];
         }
     }
     //4.
@@ -122,7 +122,7 @@ void make_border(){
         ny = py + d2 - d;
         if(area[nx][ny] == 0){
             area[nx][ny] = 5;
-            popluation[5] += A[nx][ny];
+            population[5] += A[nx][ny];
         }
     }
     //경계선 안 5 채워넣기
@@ -136,8 +136,8 @@ void make_border(){
         ny = py + d2 - d;
         make_district5(nx-1, ny);
     }
-    if(popluation[5] > max_A) max_A = popluation[5];
-    if(popluation[5] < min_A) min_A = popluation[5];
+    if(population[5] > max_A) max_A = population[5];
+    if(population[5] < min_A) min_A = population[5];
 }
 
 void select_pivot(){
