@@ -10,8 +10,8 @@
 using namespace std;
 
 int N;
-int A[101][101] = {0, };
-int area[101][101] = {0, };
+int A[21][21] = {0, };
+int area[21][21] = {0, };
 int population[6] = {0, };
 int max_A = 0;
 int min_A = 400001;
