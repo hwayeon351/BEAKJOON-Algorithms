@@ -39,7 +39,7 @@ BJ11725 트리의 부모 찾기 -> https://hwayomingdlog.tistory.com/127
 
 BJ1325 효율적인 해킹 -> https://hwayomingdlog.tistory.com/129
 
-BJ16173 점프왕 쪨리 (Small) -> 
+BJ16173 점프왕 쪨리 (Small) -> https://hwayomingdlog.tistory.com/131
 
 </br>
 [삼성 SW 역량 테스트 기출 문제]
@@ -92,7 +92,7 @@ BJ17140 이차원 배열과 연산 -> https://hwayomingdlog.tistory.com/126
 
 BJ17142 연구소 3 -> https://hwayomingdlog.tistory.com/130
 
-BJ17779 게리맨더링 2 -> 
+BJ17779 게리맨더링 2 -> https://hwayomingdlog.tistory.com/132
 
 BJ20056 마법사 상어와 파이어볼 -> 
 
