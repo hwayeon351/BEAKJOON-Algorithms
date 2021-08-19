@@ -92,5 +92,7 @@ BJ17140 이차원 배열과 연산 -> https://hwayomingdlog.tistory.com/126
 
 BJ17142 연구소 3 -> https://hwayomingdlog.tistory.com/130
 
+BJ17779 게리맨더링 2 -> 
+
 BJ20056 마법사 상어와 파이어볼 -> 
 
