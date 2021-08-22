@@ -43,7 +43,7 @@ BJ16173 점프왕 쪨리 (Small) -> https://hwayomingdlog.tistory.com/131
 
 BJ2251 물통 -> https://hwayomingdlog.tistory.com/133
 
-BJ2210 숫자판 점프 -> 
+BJ2210 숫자판 점프 -> https://hwayomingdlog.tistory.com/135
 
 </br>
 [삼성 SW 역량 테스트 기출 문제]
