@@ -21,7 +21,6 @@ void bfs(int v){
     q.push({v, 0});
     visit[v] = 1;
     int friends = 0;
-    int depth = 0;
     while(!q.empty()){
         int now_v = q.front().first;
         int depth = q.front().second;
