@@ -49,7 +49,7 @@ BJ3184 양 -> https://hwayomingdlog.tistory.com/137
 
 BJ13565 침투 -> https://hwayomingdlog.tistory.com/141
 
-BJ1303 전쟁-전투 -> 
+BJ1303 전쟁-전투 -> https://hwayomingdlog.tistory.com/143
 
 </br>
 [삼성 SW 역량 테스트 기출 문제]
