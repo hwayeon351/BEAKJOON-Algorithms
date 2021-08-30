@@ -47,7 +47,9 @@ BJ2210 숫자판 점프 -> https://hwayomingdlog.tistory.com/135
 
 BJ3184 양 -> https://hwayomingdlog.tistory.com/137
 
-BJ13565 침투 -> 
+BJ13565 침투 -> https://hwayomingdlog.tistory.com/141
+
+BJ1303 전쟁-전투 -> 
 
 </br>
 [삼성 SW 역량 테스트 기출 문제]
