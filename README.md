@@ -106,3 +106,5 @@ BJ17779 게리맨더링 2 -> https://hwayomingdlog.tistory.com/132
 
 BJ20056 마법사 상어와 파이어볼 -> 
 
+BJ19238 스타트 택시 -> https://hwayomingdlog.tistory.com/161
+
