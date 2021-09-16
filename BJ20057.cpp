@@ -263,7 +263,7 @@ void move_tornado(){
                 int yc = tc+dc[dir];
                 tr = yr;
                 tc = yc;
-                if(i==N && k==N){
+                if(i==N && k==N-1){
                     spread_sand(yr, yc, dir);
                     cout << total_out <<endl;
                     return;
