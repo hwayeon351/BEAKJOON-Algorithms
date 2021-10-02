@@ -21,6 +21,8 @@ BJ1309 동물원 -> https://hwayomingdlog.tistory.com/115
 
 BJ11659 구간 합 구하기 4 -> https://hwayomingdlog.tistory.com/128
 
+BJ3687 성냥개비 -> 
+
 </br>
 [Greedy 알고리즘 문제 풀이]
 
