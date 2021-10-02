@@ -110,7 +110,7 @@ BJ19238 스타트 택시 -> https://hwayomingdlog.tistory.com/161
 
 BJ20058 마법사 상어와 파이어스톰 -> https://hwayomingdlog.tistory.com/162
 
-BJ17822 원판 돌리기 -> 
+BJ17822 원판 돌리기 -> https://hwayomingdlog.tistory.com/165
 
 BJ20056 마법사 상어와 파이어볼 -> 
 
