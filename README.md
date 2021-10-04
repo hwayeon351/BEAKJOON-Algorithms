@@ -61,7 +61,7 @@ BJ1303 전쟁-전투 -> https://hwayomingdlog.tistory.com/143
 [투포인터 알고리즘 문제 풀이]
 
 BJ3649 로봇 프로젝트 -> https://hwayomingdlog.tistory.com/167
-BJ16472 고냥이 -> 
+BJ16472 고냥이 -> https://hwayomingdlog.tistory.com/168
 
 </br>
 [삼성 SW 역량 테스트 기출 문제]
@@ -122,7 +122,7 @@ BJ20058 마법사 상어와 파이어스톰 -> https://hwayomingdlog.tistory.com
 
 BJ17822 원판 돌리기 -> https://hwayomingdlog.tistory.com/165
 
-BJ19237 어른 상어 -> 
+BJ19237 어른 상어 -> https://hwayomingdlog.tistory.com/166
 
 BJ20056 마법사 상어와 파이어볼 -> 
 
