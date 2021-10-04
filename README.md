@@ -60,7 +60,8 @@ BJ1303 전쟁-전투 -> https://hwayomingdlog.tistory.com/143
 </br>
 [투포인터 알고리즘 문제 풀이]
 
-BJ3649 로봇 프로젝트 ->
+BJ3649 로봇 프로젝트 -> https://hwayomingdlog.tistory.com/167
+BJ16472 고냥이 -> 
 
 </br>
 [삼성 SW 역량 테스트 기출 문제]
