@@ -127,7 +127,7 @@ BJ19237 어른 상어 -> https://hwayomingdlog.tistory.com/166
 
 BJ17143 낚시왕 -> https://hwayomingdlog.tistory.com/169
 
-BJ17837 새로운 게임 2 -> 
+BJ17837 새로운 게임 2 -> https://hwayomingdlog.tistory.com/170
 
 BJ20056 마법사 상어와 파이어볼 -> 
 
