@@ -125,7 +125,9 @@ BJ17822 원판 돌리기 -> https://hwayomingdlog.tistory.com/165
 
 BJ19237 어른 상어 -> https://hwayomingdlog.tistory.com/166
 
-BJ17143 낚시왕 -> 
+BJ17143 낚시왕 -> https://hwayomingdlog.tistory.com/169
+
+BJ17837 새로운 게임 2 -> 
 
 BJ20056 마법사 상어와 파이어볼 -> 
 
