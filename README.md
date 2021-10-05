@@ -64,6 +64,8 @@ BJ3649 로봇 프로젝트 -> https://hwayomingdlog.tistory.com/167
 
 BJ16472 고냥이 -> https://hwayomingdlog.tistory.com/168
 
+BJ7453 합이 0인 네 정수 -> 
+
 </br>
 [삼성 SW 역량 테스트 기출 문제]
 
