@@ -1,10 +1,3 @@
-//
-//  main.cpp
-//  BJ17143
-//
-//  Created by Hwayeon on 2021/10/04.
-//
-
 #include <iostream>
 #include <vector>
 #include <string.h>
@@ -21,6 +14,7 @@ int dy[4] = {-1, 1, 0, 0};
 
 //낚시킹의 위치(열)
 int fisher_king = -1;
+
 //낚시킹이 잡은 상어 크기의 합
 int cnt = 0;
 
@@ -35,8 +29,10 @@ Shark shark;
 
 //격자판에 있는 상어들을 담는 벡터
 vector<Shark> sharks;
+
 //상어 이동 때 사용하는 벡터
 vector<Shark> cp_sharks;
+
 //다른 상어에 의해 잡아 먹힌 상어 크기를 담는 벡터
 vector<int> dead_sharks;
 
@@ -92,12 +88,12 @@ Shark move_shark(Shark shark){
     return nshark;
 }
 
-void fish(){    
+void fish(){
     //낚시 킹이 C-1에서 낚시를 할 때까지 반복한다
     while(fisher_king < C-1){
         //1. move fisher_king
         fisher_king++;
-
+        
         //2. fish shark
         //잡힌 상어 크기를 담는 변수
         int caught = 0;
@@ -140,11 +136,12 @@ void fish(){
                 sharks.push_back(shark);
             }
         }
+        
         //sharks 안에 죽은 상어를 없애준다 -> 상어 이동 후 최종 상어들의 상태를 cp_sharks에 담는다
         for(int i=0; i<sharks.size(); i++){
             bool ck = true;
             for(int j=0; j<dead_sharks.size(); j++){
-                if(sharks[i].z == dead_sharks[i]){
+                if(sharks[i].z == dead_sharks[j]){
                     ck = false;
                     break;
                 }
