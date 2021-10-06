@@ -131,7 +131,7 @@ BJ17143 낚시왕 -> https://hwayomingdlog.tistory.com/169
 
 BJ17837 새로운 게임 2 -> https://hwayomingdlog.tistory.com/170
 
-BJ17825 주사위 윷놀이 -> 
+BJ17825 주사위 윷놀이 -> https://hwayomingdlog.tistory.com/172
 
 BJ20056 마법사 상어와 파이어볼 -> 
 
