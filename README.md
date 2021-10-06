@@ -23,7 +23,7 @@ BJ11659 구간 합 구하기 4 -> https://hwayomingdlog.tistory.com/128
 
 BJ3687 성냥개비 -> https://hwayomingdlog.tistory.com/164
 
-BJ14002 가장 긴 증가하는 부분 수열 4 -> 
+BJ14002 가장 긴 증가하는 부분 수열 4 -> https://hwayomingdlog.tistory.com/manage/posts/
 
 </br>
 [Greedy 알고리즘 문제 풀이]
