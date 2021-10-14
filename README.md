@@ -136,6 +136,8 @@ BJ17837 새로운 게임 2 -> https://hwayomingdlog.tistory.com/170
 
 BJ17825 주사위 윷놀이 -> https://hwayomingdlog.tistory.com/172
 
+BJ20061 모노미노도미노2 -> 
+
 BJ20056 마법사 상어와 파이어볼 -> 
 
 
