@@ -56,34 +56,6 @@ void put_block1(int bx, int by){
 void put_block2(int bx, int by){
     //put block on blue board
     for(int x=4; x<=8; x++){
-        if(board[by][x+1] || board[by+1][x+1]){
-            board[by][x] = 1;
-            board[by+1][x] = 1;
-            break;
-        }
-        else if(x == 8){
-            board[by][9] = 1;
-            board[by+1][9] = 1;
-        }
-    }
-    
-    //put block on green board
-    for(int y=4; y<=8; y++){
-        if(board[y+1][bx]){
-            board[y][bx] = 1;
-            board[y-1][bx] = 1;
-            break;
-        }
-        else if(y == 8){
-            board[8][bx] = 1;
-            board[9][bx] = 1;
-        }
-    }
-}
-
-void put_block3(int bx, int by){
-    //put block on blue board
-    for(int x=4; x<=8; x++){
         if(board[by][x+1]){
             board[by][x] = 1;
             board[by][x-1] = 1;
@@ -105,6 +77,34 @@ void put_block3(int bx, int by){
         else if(y == 8){
             board[9][bx] = 1;
             board[9][bx+1] = 1;
+        }
+    }
+}
+
+void put_block3(int bx, int by){
+    //put block on blue board
+    for(int x=4; x<=8; x++){
+        if(board[by][x+1] || board[by+1][x+1]){
+            board[by][x] = 1;
+            board[by+1][x] = 1;
+            break;
+        }
+        else if(x == 8){
+            board[by][9] = 1;
+            board[by+1][9] = 1;
+        }
+    }
+    
+    //put block on green board
+    for(int y=4; y<=8; y++){
+        if(board[y+1][bx]){
+            board[y][bx] = 1;
+            board[y-1][bx] = 1;
+            break;
+        }
+        else if(y == 8){
+            board[8][bx] = 1;
+            board[9][bx] = 1;
         }
     }
 }
@@ -242,10 +242,10 @@ void monominodomino(){
                 put_block1(b.x, b.y);
                 break;
             case 2:
-                put_block3(b.x, b.y);
+                put_block2(b.x, b.y);
                 break;
             case 3:
-                put_block2(b.x, b.y);
+                put_block3(b.x, b.y);
                 break;
         }
         //check board
