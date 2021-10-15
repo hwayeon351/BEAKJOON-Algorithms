@@ -142,4 +142,6 @@ BJ21609 상어 중학교 -> https://hwayomingdlog.tistory.com/176
 
 BJ20056 마법사 상어와 파이어볼 -> https://hwayomingdlog.tistory.com/177
 
+BJ21611 마법사 상어와 블리자드 -> 
+
 
