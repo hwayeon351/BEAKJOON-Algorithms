@@ -1,106 +1,101 @@
 //
 //  main.cpp
-//  BJ13460
+//  BJ13460_1
 //
-//  Created by Hwayeon on 2021/01/16.
+//  Created by Hwayeon on 2021/10/17.
 //
+
 #include <iostream>
 #include <queue>
 using namespace std;
 
 int N, M;
-char board[10][10];
-bool visit[10][10][10][10] = {false, };
-int answer = 11;
-struct location{
-    int x;
-    int y;
+char board[10][10] = {'.',};
+int visit[10][10][10][10] = {0, };
+
+struct State{
+    int rx;
+    int ry;
+    int bx;
+    int by;
+    int cnt = 0;
 };
-location r_loc, b_loc, h_loc;
+State st;
+
 int dx[4] = {-1, 0, 1, 0};
 int dy[4] = {0, -1, 0, 1};
+queue<State> q;
 
-void escape_bead(){
-    int cnt = 0;
-    queue<pair<pair<location, location>, int>> q;
-    q.push(make_pair(make_pair(r_loc, b_loc), cnt));
-    while(cnt < 10 && !q.empty()){
-        location r = q.front().first.first;
-        location b = q.front().first.second;
-        cnt = q.front().second;
-        visit[r.y][r.x][b.y][b.x] = true;
+void move(int& x, int& y, int& dis, int& d){
+    while(board[y+dy[d]][x+dx[d]] != '#' && board[y][x] != 'O'){
+        x += dx[d];
+        y += dy[d];
+        dis ++;
+    }
+}
+
+void bfs(){
+    while(!q.empty()){
+        int rx = q.front().rx;
+        int ry = q.front().ry;
+        int bx = q.front().bx;
+        int by = q.front().by;
+        int cnt = q.front().cnt;
         q.pop();
-        for(int i=0; i<4; i++){
-            r_loc.x = r.x;
-            r_loc.y = r.y;
-            b_loc.x = b.x;
-            b_loc.y = b.y;
-            int new_rx = r.x + dx[i];
-            int new_ry = r.y + dy[i];
-            int new_bx = b.x + dx[i];
-            int new_by = b.y + dy[i];
-            while((board[new_ry][new_rx]=='.' && !(new_rx==b_loc.x && new_ry==b_loc.y)) || (board[new_by][new_bx]=='.' && !(new_bx==r_loc.x && new_by==r_loc.y))){
-                if(board[new_ry][new_rx]=='.' && !(new_rx==b_loc.x && new_ry==b_loc.y)){
-                    r_loc.x = new_rx;
-                    r_loc.y = new_ry;
-                    new_rx += dx[i];
-                    new_ry += dy[i];
+        if(cnt >= 10) break;
+        for(int d=0; d<4; d++){
+            int nrx = rx;
+            int nry = ry;
+            int r_dis = 0;
+            int nbx = bx;
+            int nby = by;
+            int b_dis = 0;
+            int ncnt = cnt+1;
+            move(nrx, nry, r_dis, d);
+            move(nbx, nby, b_dis, d);
+            if(board[nby][nbx] == 'O') continue;
+            if(board[nry][nrx] == 'O'){
+                cout << ncnt << endl;
+                return;
+            }
+            if(nrx == nbx && nry == nby){
+                if(r_dis > b_dis){
+                    nrx -= dx[d];
+                    nry -= dy[d];
                 }
-                if(board[new_by][new_bx]=='.' && !(new_bx==r_loc.x && new_by==r_loc.y)){
-                    b_loc.x = new_bx;
-                    b_loc.y = new_by;
-                    new_bx += dx[i];
-                    new_by += dy[i];
+                else{
+                    nbx -= dx[d];
+                    nby -= dy[d];
                 }
             }
-            if(board[new_ry][new_rx] == '#' || (new_rx==b_loc.x && new_ry==b_loc.y)){
-                if(board[new_by][new_bx] == '#' || (new_bx==r_loc.x && new_by==r_loc.y)){
-                    if(!visit[new_ry - dy[i]][new_rx - dx[i]][new_by - dy[i]][new_bx - dx[i]]){
-                        location new_r, new_b;
-                        new_r.x = new_rx-dx[i];
-                        new_r.y = new_ry-dy[i];
-                        new_b.x = new_bx-dx[i];
-                        new_b.y = new_by-dy[i];
-                        q.push(make_pair(make_pair(new_r, new_b), cnt+1));
-                    }
-                }
-            }
-            else if(board[new_ry][new_rx] == 'O'){
-                if(board[new_by+dy[i]][new_bx+dx[i]] != 'O'){
-                    if(answer == -1) answer = cnt+1;
-                    else{
-                        if(cnt+1 < answer) answer = cnt+1;
-                    }                
-                }
-            }
+            if(visit[nrx][nry][nbx][nby]) continue;
+            visit[nrx][nry][nbx][nby] = 1;
+            q.push({nrx, nry, nbx, nby, ncnt});
         }
     }
-    if(answer == 11) answer = -1;
+    cout << -1 << endl;
 }
 
 int main(int argc, const char * argv[]) {
     cin >> N >> M;
-    for(int i=0; i<N; i++){
-        for(int j=0; j<M; j++){
-            cin >> board[i][j];
-            if(board[i][j] == 'B'){
-                board[i][j] = '.';
-                b_loc.x = j;
-                b_loc.y = i;
+    for(int y=0; y<N; y++){
+        for(int x=0; x<M; x++){
+            cin >> board[y][x];
+            if(board[y][x] == 'R'){
+                st.rx = x;
+                st.ry = y;
+                board[y][x] = '.';
             }
-            else if(board[i][j] == 'R'){
-                board[i][j] = '.';
-                r_loc.x = j;
-                r_loc.y = i;
-            }
-            else if(board[i][j] == 'O'){
-                h_loc.x = j;
-                h_loc.y = i;
+            else if(board[y][x] == 'B'){
+                st.bx = x;
+                st.by = y;
+                board[y][x] = '.';
             }
         }
     }
-    escape_bead();
-    cout << answer << endl;
+    q.push(st);
+    visit[st.rx][st.ry][st.bx][st.by] = 1;
+    bfs();
     
     return 0;
 }
