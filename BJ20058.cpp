@@ -1,142 +1,134 @@
 //
 //  main.cpp
-//  BJ20058
+//  BJ20058_1
 //
-//  Created by Hwayeon on 2021/09/15.
+//  Created by Hwayeon on 2021/10/17.
 //
 
 #include <iostream>
+#include <vector>
 #include <queue>
 #include <math.h>
 using namespace std;
 
-int board[64][64] = {0, };
-int visit[64][64] = {0, };
 int N, Q;
-int max_rc;
-queue<int> q;
+int A[65][65] = {0, };
+int visit[65][65] = {0, };
+int cmd[1001] = {0, };
+int NN;
+int dx[4] = {0, 0, -1, 1};
+int dy[4] = {-1, 1, 0, 0};
 
-int dx[4] = {-1, 0, 1, 0};
-int dy[4] = {0, -1, 0, 1};
+vector<pair<int, int>> loc;
+vector<int> temp;
+int big_group = 0;
+int total_ice = 0;
 
-int max_hunk = 0;
-
-void rotate(int sx, int sy, int rc){
-    vector<int> temp;
-    int nx = sx;
-    int ny = sy;
-    int nrc = rc;
-    while(nrc>=2){
-        //1. temp 담기
-        temp.clear();
-        for(int d=nrc-2; d>=0; d--){
-            temp.push_back(board[ny+d][nx]);
-        }
-        
-        //2. 회전
-        for(int d=0; d<nrc; d++){
-            board[ny+d][nx] = board[ny+nrc-1][nx+d];
-        }
-        
-        for(int d=0; d<nrc-1; d++){
-            board[ny+nrc-1][nx+nrc-1-d] = board[ny+d][nx+nrc-1];
-        }
-        for(int d=nrc-1; d>=1; d--){
-            board[ny+d][nx+nrc-1] = board[ny][nx+d];
-        }
-        
-        for(int i=1; i<=temp.size(); i++){
-            board[ny][nx+i] = temp[i-1];
-        }
-        nrc -= 2;
-        nx += 1;
-        ny += 1;
-    }
-}
-
-void reduce_ice(){
-    vector<pair<int, int>> spots;
-    for(int y=0; y<max_rc; y++){
-        for(int x=0; x<max_rc; x++){
-            if(board[y][x]<=0) continue;
-            int cnt = 0;
+void remove_ice(){
+    int nx, ny, cnt;
+    loc.clear();
+    for(int y=0; y<NN; y++){
+        for(int x=0; x<NN; x++){
+            if(A[y][x] == 0) continue;
+            cnt = 0;
             for(int d=0; d<4; d++){
-                int nx = x+dx[d];
-                int ny = y+dy[d];
-                if(nx<0 || nx>=max_rc || ny<0 || ny>=max_rc) continue;
-                if(board[ny][nx] > 0) cnt++;
+                nx = x + dx[d];
+                ny = y + dy[d];
+                if(nx<0 || nx>=NN || ny<0 || ny>=NN) continue;
+                if(A[ny][nx] > 0) cnt++;
             }
-            if(cnt<3) spots.push_back({x, y});
+            if(cnt < 3) loc.push_back({x, y});
         }
     }
-    for(int i=0; i<spots.size(); i++){
-        int x = spots[i].first;
-        int y = spots[i].second;
-        board[y][x] --;
+    for(int i=0; i<loc.size(); i++){
+        A[loc[i].second][loc[i].first]--;
     }
 }
 
-void firestorm(){
-    while(!q.empty()){
-        int n = q.front();
-        int rc = pow(2, n);
-        q.pop();
-        for(int sy=0; sy<max_rc; sy+=rc){
-            for(int sx=0; sx<max_rc; sx+=rc){
-                rotate(sx, sy, rc);
+void play_firestorm(){
+    int L, LL;
+    for(int q=0; q<Q; q++){
+        L = cmd[q];
+        LL = pow(2, L);
+        for(int l=0; l<NN; l+=LL){
+            for(int m=0; m<NN; m+=LL){
+                temp.clear();
+                for(int y=l; y<l+LL; y++){
+                    for(int x=m; x<m+LL; x++){
+                        temp.push_back(A[y][x]);
+                    }
+                }
+                for(int x=m; x<m+LL; x++){
+                    for(int y=l+LL-1; y>=l; y--){
+                        A[y][x] = temp.back();
+                        temp.pop_back();
+                    }
+                }
             }
         }
-        reduce_ice();
+        remove_ice();
     }
 }
 
-void bfs(int sx, int sy){
-    queue<pair<int, int>> queue;
-    queue.push({sx, sy});
-    visit[sy][sx] = 1;
+int get_ice(){
+    int cnt = 0;
+    for(int y=0; y<NN; y++){
+        for(int x=0; x<NN; x++){
+            cnt += A[y][x];
+        }
+    }
+    return cnt;
+}
+
+void get_big_group(int sx, int sy){
     int cnt = 1;
-    while(!queue.empty()){
-        int now_x = queue.front().first;
-        int now_y = queue.front().second;
-        queue.pop();
-        for(int i=0; i<4; i++){
-            int nx = now_x + dx[i];
-            int ny = now_y + dy[i];
-            if(nx<0 || nx>=max_rc || ny<0 || ny>=max_rc) continue;
+    visit[sy][sx] = 1;
+    queue<pair<int, int>> q;
+    q.push({sx, sy});
+    while(!q.empty()){
+        int now_x = q.front().first;
+        int now_y = q.front().second;
+        q.pop();
+        for(int d=0; d<4; d++){
+            int nx = now_x + dx[d];
+            int ny = now_y + dy[d];
+            if(nx<0 || nx>=NN || ny<0 || ny>=NN) continue;
             if(visit[ny][nx]) continue;
-            if(board[ny][nx] <= 0) continue;
-            queue.push({nx, ny});
+            if(A[ny][nx]==0) continue;
             visit[ny][nx] = 1;
-            cnt++;
+            cnt ++;
+            q.push({nx, ny});
         }
     }
-    if(cnt > max_hunk) max_hunk = cnt;
+    if(cnt > big_group) big_group = cnt;
 }
 
 int main(int argc, const char * argv[]) {
     cin >> N >> Q;
-    max_rc = pow(2, N);
-    for(int i=0; i<max_rc; i++){
-        for(int j=0; j<max_rc; j++){
-            cin >> board[i][j];
+    NN = pow(2, N);
+    for(int y=0; y<NN; y++){
+        for(int x=0; x<NN; x++){
+            cin >> A[y][x];
         }
     }
-    for(int i=0; i<Q; i++){
-        int qq;
-        cin >> qq;
-        q.push(qq);
+    for(int q=0; q<Q; q++){
+        cin >> cmd[q];
     }
-    firestorm();
-    int remain_ice = 0;
-    for(int y=0; y<max_rc; y++){
-        for(int x=0; x<max_rc; x++){
-            remain_ice += board[y][x];
-            if(board[y][x] > 0 && !visit[y][x]) bfs(x, y);
+    play_firestorm();
+    total_ice = get_ice();
+    if(total_ice == 0){
+        cout << 0 << endl;
+        cout << 0 << endl;
+        return 0;
+    }
+    for(int y=0; y<NN; y++){
+        for(int x=0; x<NN; x++){
+            if(A[y][x] > 0 && !visit[y][x]){
+                get_big_group(x, y);
+            }
         }
     }
-    
-    cout << remain_ice << endl;
-    cout << max_hunk << endl;
-    
+    cout << total_ice << endl;
+    cout << big_group << endl;
     return 0;
 }
