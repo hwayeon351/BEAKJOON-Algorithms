@@ -1,87 +1,70 @@
 //
 //  main.cpp
-//  BJ20055
+//  BJ20055_1
 //
-//  Created by Hwayeon on 2021/07/12.
+//  Created by Hwayeon on 2021/10/18.
 //
 
 #include <iostream>
+#include <deque>
 using namespace std;
 
 int N, K;
-int conv[200];
-int robot[100];
+struct Convey{
+    int A;
+    bool robot = false;
+};
+Convey cv;
+deque<Convey> belts;
+int cnt = 0;
 
-void move_conv(){
-    int temp = conv[2*N-1];
-    for(int i=2*N-2; i>=0; i--){
-        conv[i+1] = conv[i];
-    }
-    conv[0] = temp;
-
-    for(int i=N-3; i>=0; i--){
-        robot[i+1] = robot[i];
-    }
-    robot[0] = 0;
-    robot[N-1] = 0;
-}
-
-void move_robot(){
-    if(robot[N-2] && conv[N-1] > 0){
-        robot[N-2] = 0;
-        conv[N-1]--;
-    }
-    for(int i=N-3; i>=1; i--){
-        if(robot[i] && conv[i+1] > 0 && !robot[i+1]){
-            robot[i] = 0;
-            robot[i+1] = 1;
-            conv[i+1]--;
-        }
-    }
-}
-
-void lift_robot(){
-    if(conv[0] > 0){
-        conv[0]--;
-        robot[0] = 1;
-    }
-}
-
-int check_conv(){
-    int cnt = 0;
-    for(int i=0; i<2*N; i++){
-        if(conv[i]==0) cnt++;
-    }
-    return cnt;
-}
-
-int move(){
-    int cnt = 0;
+void move_robots(){
     while(true){
-        //수행 단계 카운팅
-        cnt ++;
+        cnt++;
         
-        //1. 벨트와 로봇 한 칸 회전
-        move_conv();
-
-        //2. 로봇 이동
-        move_robot();
-
-        //3. 로봇 추가
-        lift_robot();
-
-        //4. 내구도 검사
-        int k = check_conv();
-        if(K <= k) break;
+        //1. 벨트 한 칸 회전
+        cv = belts.back();
+        belts.pop_back();
+        belts.push_front(cv);
+        //내리는 곳에 로봇이 있는 경우, 로봇을 내린다
+        if(belts[N-1].robot) belts[N-1].robot = false;
+        
+        //2. 가장 먼저 벨트에 올라간 로봇부터, 한 칸 이동
+        for(int i=N-2; i>=0; i--){
+            if(!belts[i].robot) continue;
+            if(belts[i+1].robot) continue;
+            if(belts[i+1].A > 0){
+                belts[i+1].robot = true;
+                belts[i+1].A--;
+                belts[i].robot = false;
+            }
+        }
+        //내리는 곳에 로봇이 있는 경우, 로봇을 내린다
+        if(belts[N-1].robot) belts[N-1].robot = false;
+        
+        //3. 올리는 위치에 로봇을 올린다
+        if(belts[0].A > 0){
+            belts[0].robot = true;
+            belts[0].A --;
+        }
+        
+        //4. 내구도가 0인 칸의 개수 세기
+        int gone = 0;
+        for(int i=0; i<2*N; i++){
+            if(belts[i].A == 0) gone++;
+        }
+        if(gone >= K) break;
     }
-    return cnt;
 }
 
 int main(int argc, const char * argv[]) {
     cin >> N >> K;
     for(int i=0; i<2*N; i++){
-        cin >> conv[i];
+        cin >> cv.A;
+        belts.push_back(cv);
     }
-    cout << move() << endl;
+    move_robots();
+    cout << cnt << endl;
+    
     return 0;
 }
