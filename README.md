@@ -145,3 +145,5 @@ BJ20056 마법사 상어와 파이어볼 -> https://hwayomingdlog.tistory.com/17
 BJ21611 마법사 상어와 블리자드 -> https://hwayomingdlog.tistory.com/178
 
 BJ12100 2048 (Easy) -> https://hwayomingdlog.tistory.com/184
+
+BJ16236 아기 상어 -> 
