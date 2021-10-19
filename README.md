@@ -146,4 +146,4 @@ BJ21611 마법사 상어와 블리자드 -> https://hwayomingdlog.tistory.com/17
 
 BJ12100 2048 (Easy) -> https://hwayomingdlog.tistory.com/184
 
-BJ16236 아기 상어 -> 
+BJ16236 아기 상어 -> https://hwayomingdlog.tistory.com/189
