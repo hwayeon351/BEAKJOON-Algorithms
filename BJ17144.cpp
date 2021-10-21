@@ -1,130 +1,152 @@
 //
 //  main.cpp
-//  BJ17144
+//  BJ17144_1
 //
-//  Created by Hwayeon on 2021/08/08.
+//  Created by Hwayeon on 2021/10/21.
 //
 
 #include <iostream>
+#include <queue>
 #include <vector>
 using namespace std;
 
 int R, C, T;
-int A[50][50] = {0,};
-struct air_cleaner{
-    int tx = 0;
-    int ty = 0;
-    int bx = 0;
-    int by = 0;
-};
-air_cleaner cleaner;
-vector<pair<int, int>> dust;
-int dx[4] = {-1, 0, 1, 0};
-int dy[4] = {0, -1, 0, 1};
+int A[50][50] = {0, };
+int dc[4] = {-1, 0, 1, 0};
+int dr[4] = {0, -1, 0, 1};
+int cleaner_r1 = -1;
+int cleaner_r2 = -1;
+int cleaner_c1 = -1;
+int cleaner_c2 = -1;
+vector<pair<pair<int, int>, int>> dusts;
+queue<int> temp;
 int total_dust = 0;
 
-void clean_air(){
-    while(T > 0){
-        //1. 확산
-        int change[50][50] = {0, };
-        while(!dust.empty()){
-            int x = dust.back().first;
-            int y = dust.back().second;
-            dust.pop_back();
-            int cnt = 0;
-            for(int i=0; i<4; i++){
-                int nx = x + dx[i];
-                int ny = y + dy[i];
-                //칸이 없는 경우,
-                if(nx<0 || nx>=C || ny<0 || ny>=R) continue;
-                //공기청정기인 경우,
-                if(A[ny][nx] == -1) continue;
-                change[ny][nx] += A[y][x]/5;
-                cnt++;
-            }
-            change[y][x] -= (A[y][x]/5*cnt);
-        }
-        for(int i=0; i<R; i++){
-            for(int j=0; j<C; j++){
-                A[i][j] += change[i][j];
-            }
-        }
-        
-        //2. 공기청정기 작동
-        //위쪽 바람
-        //하 -> col = 0, row = 0~cleaner.ty-1
-        for(int r=cleaner.ty-2; r>=0; r--){
-            A[r+1][0] = A[r][0];
-        }
-        //좌 -> row = 0, col = 0~R-1
-        for(int c=1; c<=C-1; c++){
-            A[0][c-1] = A[0][c];
-        }
-        //상 -> col = C-1, row = 0~cleaner.ty
-        for(int r=0; r<cleaner.ty; r++){
-            A[r][C-1] = A[r+1][C-1];
-        }
-        //우 -> row = cleaner.ty, col = 1~C-1
-        for(int c=C-2; c>=1; c--){
-            A[cleaner.ty][c+1] = A[cleaner.ty][c];
-        }
-        A[cleaner.ty][1] = 0;
-        
-        //아래쪽 바람
-        //상 -> col = 0, row = cleaner.by+1~R-1
-        for(int r=cleaner.by+2; r<=R-1; r++){
-            A[r-1][0] = A[r][0];
-        }
-        //좌 -> row = R-1, col = 0~C-1
-        for(int c=1; c<=C-1; c++){
-            A[R-1][c-1] = A[R-1][c];
-        }
-        //하 -> col = C-1, row = cleaner.by~R-1
-        for(int r=R-2; r>=cleaner.by; r--){
-            A[r+1][C-1] = A[r][C-1];
-        }
-        //우 -> row = cleaner.by, col = 1~C-1
-        for(int c=C-2; c>=1; c--){
-            A[cleaner.by][c+1] = A[cleaner.by][c];
-        }
-        A[cleaner.by][1] = 0;
-        
-        //먼지 위치 추가, 미세먼지 양 카운팅
-        int t_d = 0;
-        for(int i=0; i<R; i++){
-            for(int j=0; j<C; j++){
-                if(A[i][j] > 0) {
-                    t_d += A[i][j];
-                    dust.push_back(make_pair(j, i));
+void spread_dust(){
+    dusts.clear();
+    for(int r=0; r<R; r++){
+        for(int c=0; c<C; c++){
+            if(A[r][c] > 0){
+                int spread = 0;
+                for(int d=0; d<4; d++){
+                    int nr = r+dr[d];
+                    int nc = c+dc[d];
+                    if(nr<0 || nr>=R || nc<0 || nc>=C) continue;
+                    if(A[nr][nc] == -1) continue;
+                    dusts.push_back({{nr, nc}, A[r][c]/5});
+                    spread += (A[r][c]/5);
                 }
+                A[r][c] -= spread;
             }
         }
-        total_dust = t_d;
-        T--;
+    }
+    for(int i=0; i<dusts.size(); i++){
+        A[dusts[i].first.first][dusts[i].first.second] += dusts[i].second;
+    }
+}
+
+void play_cleaner(){
+    //위쪽 바람
+    for(int c=1; c<C; c++){
+        temp.push(A[cleaner_r1][c]);
+    }
+    for(int r=cleaner_r1-1; r>=0; r--){
+        temp.push(A[r][C-1]);
+    }
+    for(int c=C-2; c>=0; c--){
+        temp.push(A[0][c]);
+    }
+    for(int r=1; r<cleaner_r1-1; r++){
+        temp.push(A[r][0]);
+    }
+    A[cleaner_r1][1] = 0;
+    for(int c=2; c<C; c++){
+        A[cleaner_r1][c] = temp.front();
+        temp.pop();
+    }
+    for(int r=cleaner_r1-1; r>=0; r--){
+        A[r][C-1] = temp.front();
+        temp.pop();
+    }
+    for(int c=C-2; c>=0; c--){
+        A[0][c] = temp.front();
+        temp.pop();
+    }
+    for(int r=1; r<cleaner_r1; r++){
+        A[r][0] = temp.front();
+        temp.pop();
+    }
+    
+    //아래쪽 바람
+    for(int c=1; c<C; c++){
+        temp.push(A[cleaner_r2][c]);
+    }
+    for(int r=cleaner_r2+1; r<R; r++){
+        temp.push(A[r][C-1]);
+    }
+    for(int c=C-2; c>=0; c--){
+        temp.push(A[R-1][c]);
+    }
+    for(int r=R-2; r>cleaner_r2+1; r--){
+        temp.push(A[r][0]);
+    }
+    A[cleaner_r2][1] = 0;
+    for(int c=2; c<C; c++){
+        A[cleaner_r2][c] = temp.front();
+        temp.pop();
+    }
+    for(int r=cleaner_r2+1; r<R; r++){
+        A[r][C-1] = temp.front();
+        temp.pop();
+    }
+    for(int c=C-2; c>=0; c--){
+        A[R-1][c] = temp.front();
+        temp.pop();
+    }
+    for(int r=R-2; r>cleaner_r2; r--){
+        A[r][0] = temp.front();
+        temp.pop();
+    }
+}
+
+void simulate(){
+    for(int t=0; t<T; t++){
+        //1. 미세먼지 확산
+        spread_dust();
+        //2. 공기청정기 작동
+        play_cleaner();
+    }
+}
+
+void get_total_dust(){
+    for(int r=0; r<R; r++){
+        for(int c=0; c<C; c++){
+            if(A[r][c] <= 0) continue;
+            total_dust += A[r][c];
+        }
     }
 }
 
 int main(int argc, const char * argv[]) {
     cin >> R >> C >> T;
-    for(int i=0; i<R; i++){
-        for(int j=0; j<C; j++){
-            cin >> A[i][j];
-            //공기청정기인 경우,
-            if(A[i][j] == -1){
-                if(cleaner.ty == 0){
-                    cleaner.ty = i;
+    for(int r=0; r<R; r++){
+        for(int c=0; c<C; c++){
+            cin >> A[r][c];
+            if(A[r][c] == -1){
+                if(cleaner_c1 == -1){
+                    cleaner_c1 = c;
+                    cleaner_r1 = r;
                 }
                 else{
-                    cleaner.by = i;
+                    cleaner_c2 = c;
+                    cleaner_r2 = r;
                 }
-            }
-            //먼지인 경우,
-            else if(A[i][j] > 0){
-                dust.push_back(make_pair(j, i));
             }
         }
     }
-    clean_air();
+    simulate();
+    get_total_dust();
     cout << total_dust << endl;
+    
     return 0;
 }
