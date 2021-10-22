@@ -148,4 +148,4 @@ BJ12100 2048 (Easy) -> https://hwayomingdlog.tistory.com/184
 
 BJ16236 아기 상어 -> https://hwayomingdlog.tistory.com/189
 
-BJ19236 청소년 상어 -> 
+BJ19236 청소년 상어 -> https://hwayomingdlog.tistory.com/193
