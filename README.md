@@ -60,7 +60,7 @@ BJ1303 전쟁-전투 -> https://hwayomingdlog.tistory.com/143
 
 BJ12015 가장 긴 증가하는 부분 수열 2 -> https://hwayomingdlog.tistory.com/174
 
-BJ2512 예산 -> 
+BJ2512 예산 -> https://hwayomingdlog.tistory.com/195
 
 BJ2805 나무자르기 ->
 
