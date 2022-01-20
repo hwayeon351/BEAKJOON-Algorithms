@@ -68,7 +68,7 @@ BJ2343 기타 레슨 -> https://hwayomingdlog.tistory.com/197
 
 BJ6236 용돈 관리 -> https://hwayomingdlog.tistory.com/198
 
-BJ1654 랜선 자르기 ->
+BJ1654 랜선 자르기 -> https://hwayomingdlog.tistory.com/199
 
 BJ2110 공유기설치 ->
 
