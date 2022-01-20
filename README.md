@@ -62,7 +62,7 @@ BJ12015 가장 긴 증가하는 부분 수열 2 -> https://hwayomingdlog.tistory
 
 BJ2512 예산 -> https://hwayomingdlog.tistory.com/195
 
-BJ2805 나무자르기 ->
+BJ2805 나무자르기 -> https://hwayomingdlog.tistory.com/196
 
 BJ2343 기타 레슨 ->
 
