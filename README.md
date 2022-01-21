@@ -72,7 +72,9 @@ BJ1654 랜선 자르기 -> https://hwayomingdlog.tistory.com/199
 
 BJ2110 공유기설치 -> https://hwayomingdlog.tistory.com/200
 
-BJ15732 도토리 숨기기 -> 
+BJ15732 도토리 숨기기 -> https://hwayomingdlog.tistory.com/202
+
+BJ1300 K번째 수 -> 
 
 </br>
 [투포인터 알고리즘 문제 풀이]
