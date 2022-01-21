@@ -70,7 +70,7 @@ BJ6236 용돈 관리 -> https://hwayomingdlog.tistory.com/198
 
 BJ1654 랜선 자르기 -> https://hwayomingdlog.tistory.com/199
 
-BJ2110 공유기설치 ->
+BJ2110 공유기설치 -> https://hwayomingdlog.tistory.com/200
 
 </br>
 [투포인터 알고리즘 문제 풀이]
