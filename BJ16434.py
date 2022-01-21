@@ -2,7 +2,7 @@ import sys
 from math import ceil
 def get_max_HP(N, s_atk, rooms):
     left = 1
-    right = 123456*1000000000000
+    right = N*1000000000000
     while left <= right:
         mid = (left+right)//2
         soldier_HP = mid
