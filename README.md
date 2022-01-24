@@ -36,7 +36,7 @@ BJ8980 택배 -> https://hwayomingdlog.tistory.com/121
 
 BJ11501 주식 -> https://hwayomingdlog.tistory.com/125
 
-BJ1969 DNA -> 
+BJ1969 DNA -> https://hwayomingdlog.tistory.com/206
 
 BJ2217 로프 -> 
 
