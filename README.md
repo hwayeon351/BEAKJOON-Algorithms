@@ -38,7 +38,9 @@ BJ11501 주식 -> https://hwayomingdlog.tistory.com/125
 
 BJ1969 DNA -> https://hwayomingdlog.tistory.com/206
 
-BJ2217 로프 -> 
+BJ2217 로프 -> https://hwayomingdlog.tistory.com/207
+
+BJ
 
 </br>
 [DFS/BFS 알고리즘 문제 풀이]
