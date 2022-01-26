@@ -46,7 +46,11 @@ BJ1449 수리공 항승 -> https://hwayomingdlog.tistory.com/210
 
 BJ11047 동전 0 -> https://hwayomingdlog.tistory.com/211
 
-BJ1931 회의실 배정 -> 
+BJ1931 회의실 배정 -> https://hwayomingdlog.tistory.com/212
+
+BJ
+
+BJ
 
 </br>
 [DFS/BFS 알고리즘 문제 풀이]
