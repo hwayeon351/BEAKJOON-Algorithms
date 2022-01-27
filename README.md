@@ -48,9 +48,9 @@ BJ11047 동전 0 -> https://hwayomingdlog.tistory.com/211
 
 BJ1931 회의실 배정 -> https://hwayomingdlog.tistory.com/212
 
-BJ11000 강의실 배정 -> 
+BJ11000 강의실 배정 -> https://hwayomingdlog.tistory.com/215
 
-BJ2212 센서 ->
+BJ2212 센서 -> https://hwayomingdlog.tistory.com/216
 
 </br>
 [DFS/BFS 알고리즘 문제 풀이]
