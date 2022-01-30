@@ -52,7 +52,7 @@ BJ11000 강의실 배정 -> https://hwayomingdlog.tistory.com/215
 
 BJ2212 센서 -> https://hwayomingdlog.tistory.com/216
 
-BJ1700 멀티탭 스케줄링 -> 
+BJ1700 멀티탭 스케줄링 -> https://hwayomingdlog.tistory.com/219
 
 BJ1493 박스 채우기 -> 
 
