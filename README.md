@@ -85,7 +85,7 @@ BJ1697 숨바꼭질 -> https://hwayomingdlog.tistory.com/229
 
 BJ7576 토마토 -> https://hwayomingdlog.tistory.com/230
 
-BJ5014 스타트링크 -> 
+BJ5014 스타트링크 -> https://hwayomingdlog.tistory.com/231
 
 </br>
 [이분탐색 알고리즘 문제 풀이]
