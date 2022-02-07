@@ -89,9 +89,9 @@ BJ5014 스타트링크 -> https://hwayomingdlog.tistory.com/231
 
 BJ6593 상범 빌딩 -> https://hwayomingdlog.tistory.com/233
 
-BJ5427 불 -> 
+BJ5427 불 -> https://hwayomingdlog.tistory.com/236
 
-BJ9019 DSLR ->
+BJ9019 DSLR -> https://hwayomingdlog.tistory.com/235
 
 
 </br>
