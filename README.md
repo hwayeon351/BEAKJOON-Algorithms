@@ -93,6 +93,10 @@ BJ5427 불 -> https://hwayomingdlog.tistory.com/236
 
 BJ9019 DSLR -> https://hwayomingdlog.tistory.com/235
 
+BJ2206 벽 부수고 이동하기 -> https://hwayomingdlog.tistory.com/239
+
+BJ3055 탈출 -> https://hwayomingdlog.tistory.com/238
+
 
 </br>
 [이분탐색 알고리즘 문제 풀이]
