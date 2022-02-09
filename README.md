@@ -97,7 +97,7 @@ BJ2206 벽 부수고 이동하기 -> https://hwayomingdlog.tistory.com/239
 
 BJ3055 탈출 -> https://hwayomingdlog.tistory.com/238
 
-BJ1039 교환 -> 
+BJ1039 교환 -> https://hwayomingdlog.tistory.com/242
 
 BJ16397 탈출 -> https://hwayomingdlog.tistory.com/241
 
