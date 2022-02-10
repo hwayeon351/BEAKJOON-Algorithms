@@ -101,11 +101,11 @@ BJ1039 교환 -> https://hwayomingdlog.tistory.com/242
 
 BJ16397 탈출 -> https://hwayomingdlog.tistory.com/241
 
-BJ7562 나이트의 이동 -> 
+BJ7562 나이트의 이동 -> https://hwayomingdlog.tistory.com/246
 
-BJ2644 촌수 계산 -> 
+BJ2644 촌수 계산 -> https://hwayomingdlog.tistory.com/245
 
-BJ1525 퍼즐 -> 
+BJ1525 퍼즐 -> https://hwayomingdlog.tistory.com/244
 
 
 </br>
