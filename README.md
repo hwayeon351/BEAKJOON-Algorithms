@@ -101,6 +101,10 @@ BJ1039 교환 -> https://hwayomingdlog.tistory.com/242
 
 BJ16397 탈출 -> https://hwayomingdlog.tistory.com/241
 
+BJ7562 나이트의 이동 -> 
+
+BJ2644 촌수 계산 -> 
+
 
 </br>
 [이분탐색 알고리즘 문제 풀이]
