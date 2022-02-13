@@ -107,6 +107,15 @@ BJ2644 촌수 계산 -> https://hwayomingdlog.tistory.com/245
 
 BJ1525 퍼즐 -> https://hwayomingdlog.tistory.com/244
 
+BJ2583 영역 구하기 ->
+
+BJ10026 적록색약 ->
+
+BJ1012 유기농 배추 ->
+
+BJ11724 연결 요소의 개수 ->
+
+
 
 </br>
 [이분탐색 알고리즘 문제 풀이]
