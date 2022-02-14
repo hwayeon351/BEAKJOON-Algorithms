@@ -109,13 +109,13 @@ BJ1525 퍼즐 -> https://hwayomingdlog.tistory.com/244
 
 BJ2583 영역 구하기 -> https://hwayomingdlog.tistory.com/250
 
-BJ10026 적록색약 ->
+BJ10026 적록색약 -> https://hwayomingdlog.tistory.com/254
 
-BJ1012 유기농 배추 ->
+BJ1012 유기농 배추 -> https://hwayomingdlog.tistory.com/255
 
-BJ11724 연결 요소의 개수 ->
+BJ11724 연결 요소의 개수 -> https://hwayomingdlog.tistory.com/256
 
-BJ1743 음식물 피하기 -> 
+BJ1743 음식물 피하기 -> https://hwayomingdlog.tistory.com/253
 
 
 </br>
