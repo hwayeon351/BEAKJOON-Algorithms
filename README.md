@@ -117,6 +117,10 @@ BJ11724 연결 요소의 개수 -> https://hwayomingdlog.tistory.com/256
 
 BJ1743 음식물 피하기 -> https://hwayomingdlog.tistory.com/253
 
+BJ2667 단지번호붙이기 -> https://hwayomingdlog.tistory.com/258
+
+BJ11403 경로 찾기 -> https://hwayomingdlog.tistory.com/259
+
 
 </br>
 [이분탐색 알고리즘 문제 풀이]
