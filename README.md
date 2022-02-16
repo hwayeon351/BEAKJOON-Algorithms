@@ -121,6 +121,10 @@ BJ2667 단지번호붙이기 -> https://hwayomingdlog.tistory.com/258
 
 BJ11403 경로 찾기 -> https://hwayomingdlog.tistory.com/259
 
+BJ9466 텀 프로젝트 -> 
+
+BJ2468 안전 영역 -> 
+
 
 </br>
 [이분탐색 알고리즘 문제 풀이]
