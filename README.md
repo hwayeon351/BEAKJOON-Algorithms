@@ -121,9 +121,9 @@ BJ2667 단지번호붙이기 -> https://hwayomingdlog.tistory.com/258
 
 BJ11403 경로 찾기 -> https://hwayomingdlog.tistory.com/259
 
-BJ9466 텀 프로젝트 -> 
+BJ9466 텀 프로젝트 -> https://hwayomingdlog.tistory.com/262
 
-BJ2468 안전 영역 -> 
+BJ2468 안전 영역 -> https://hwayomingdlog.tistory.com/261
 
 
 </br>
