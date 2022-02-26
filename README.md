@@ -27,6 +27,8 @@ BJ14002 가장 긴 증가하는 부분 수열 4 -> https://hwayomingdlog.tistory
 
 BJ16500 문자열 판별 -> 
 
+BJ11057 오르막 수 ->
+
 </br>
 [Greedy 알고리즘 문제 풀이]
 
