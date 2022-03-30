@@ -1,123 +1,126 @@
+//
+//  main.cpp
+//  BJ14891
+//
+//  Created by 최화연 on 2022/03/30.
+//
+
 #include <iostream>
-#include <deque>
-#include <cmath>
+#include <vector>
+#include <queue>
 using namespace std;
-int wheels[4][8] = {0, };
+
+int wheel[5][8] = {0, };
 int K;
-deque<pair<int, int>> cmd;
-deque<pair<int, int>> rotate_wh;
-int score = 0;
-void check_wheels(int num, int d){
-    switch(num){
-        case 0:
-            //0-1
-            if(wheels[0][2] != wheels[1][6]){
-                rotate_wh.push_back(make_pair(1, -1*d));
-                //1-2
-                if(wheels[1][2] != wheels[2][6]){
-                    rotate_wh.push_back(make_pair(2, d));
-                    //2-3
-                    if(wheels[2][2] != wheels[3][6]){
-                        rotate_wh.push_back(make_pair(3, -1*d));
-                    }
-                }
+vector<pair<int, int>> cmds;
+queue<pair<int, int>> rotates;
+
+void rotate() {
+    while (!rotates.empty()) {
+        int n = rotates.front().first;
+        int d = rotates.front().second;
+        rotates.pop();
+        if (d == 1) {
+            int temp = wheel[n][7];
+            for(int i=6; i>=0; i--) {
+                wheel[n][i+1] = wheel[n][i];
             }
-            break;
+            wheel[n][0] = temp;
+        }
+        else {
+            int temp = wheel[n][0];
+            for(int i=1; i<=7; i++) {
+                wheel[n][i-1] = wheel[n][i];
+            }
+            wheel[n][7] = temp;
+        }
+    }
+}
+
+void rotate_wheels(int n, int d) {
+    rotates.push({n, d});
+    switch (n) {
         case 1:
-            //1-0
-            if(wheels[1][6] != wheels[0][2]){
-                rotate_wh.push_back(make_pair(0, -1*d));
-            }
-            //1-2
-            if(wheels[1][2] != wheels[2][6]){
-                rotate_wh.push_back(make_pair(2, -1*d));
-                //2-3
-                if(wheels[2][2] != wheels[3][6]){
-                    rotate_wh.push_back(make_pair(3, d));
+            if (wheel[1][2] != wheel[2][6]) {
+                rotates.push({2, d*(-1)});
+                if (wheel[2][2] != wheel[3][6]) {
+                    rotates.push({3, d});
+                    if(wheel[3][2] != wheel[4][6]) {
+                        rotates.push({4, d*(-1)});
+                    }
                 }
             }
             break;
+        
         case 2:
-            //2-1
-            if(wheels[2][6] != wheels[1][2]){
-                rotate_wh.push_back(make_pair(1, -1*d));
-                //1-0
-                if(wheels[1][6] != wheels[0][2]){
-                    rotate_wh.push_back(make_pair(0, d));
+            if (wheel[2][6] != wheel[1][2]) {
+                rotates.push({1, d*(-1)});
+            }
+            if (wheel[2][2] != wheel[3][6]) {
+                rotates.push({3, d*(-1)});
+                if(wheel[3][2] != wheel[4][6]) {
+                    rotates.push({4, d});
                 }
             }
-            //2-3
-            if(wheels[2][2] != wheels[3][6]){
-                rotate_wh.push_back(make_pair(3, -1*d));
+            break;
+            
+        case 3:
+            if (wheel[3][6] != wheel[2][2]) {
+                rotates.push({2, d*(-1)});
+                if(wheel[2][6] != wheel[1][2]) {
+                    rotates.push({1, d});
+                }
+            }
+            if (wheel[3][2] != wheel[4][6]) {
+                rotates.push({4, d*(-1)});
             }
             break;
-        case 3:
-            //3-2
-            if(wheels[3][6] != wheels[2][2]){
-                rotate_wh.push_back(make_pair(2, -1*d));
-                if(wheels[2][6] != wheels[1][2]){
-                    rotate_wh.push_back(make_pair(1, d));
-                    if(wheels[1][6] != wheels[0][2]){
-                        rotate_wh.push_back(make_pair(0, -1*d));
+            
+        case 4:
+            if (wheel[4][6] != wheel[3][2]) {
+                rotates.push({3, d*(-1)});
+                if(wheel[3][6] != wheel[2][2]) {
+                    rotates.push({2, d});
+                    if(wheel[2][6] != wheel[1][2]) {
+                        rotates.push({1, d*(-1)});
                     }
                 }
             }
             break;
     }
-    return;
+    rotate();
 }
-void rotate_wheels(){
-    while(!cmd.empty()){
-        rotate_wh.clear();
-        rotate_wh.push_back(cmd.front());
-        cmd.pop_front();
-        check_wheels(rotate_wh.front().first, rotate_wh.front().second);
-        while(!rotate_wh.empty()){
-            int wh = rotate_wh.front().first;
-            int d = rotate_wh.front().second;
-            rotate_wh.pop_front();
-            if(d == 1){
-                int temp = wheels[wh][7];
-                for(int i=6; i>=0; i--){
-                    wheels[wh][i+1] = wheels[wh][i];
-                }
-                wheels[wh][0] = temp;
-            }
-            else{
-                int temp = wheels[wh][0];
-                for(int i=1; i<=7; i++){
-                    wheels[wh][i-1] = wheels[wh][i];
-                }
-                wheels[wh][7] = temp;
-            }
-        }
-    }
+
+int calculate_score() {
+    int score = 0;
+    if (wheel[1][0]) score ++;
+    if (wheel[2][0]) score += 2;
+    if (wheel[3][0]) score += 4;
+    if (wheel[4][0]) score += 8;
+    return score;
 }
-void cal_score(){
-    for(int i=0; i<4; i++){
-        if(wheels[i][0] == 1){
-            score += pow(2, i);
-        }
-    }
-}
+
 int main(int argc, const char * argv[]) {
-    for(int i=0; i<4; i++){
+    for(int i=1; i<=4; i++) {
         int n;
         cin >> n;
-        for(int j=7; j>=0; j--){
-            wheels[i][j] = n % 10;
+        for(int j=7; j>=0; j--) {
+            wheel[i][j] = n % 10;
             n /= 10;
         }
     }
     cin >> K;
-    for(int i=0; i<K; i++){
-        int num, d;
-        cin >> num >> d;
-        cmd.push_back(make_pair(num-1, d));
+    for(int i=0; i<K; i++) {
+        int n, d;
+        cin >> n >> d;
+        cmds.push_back({n, d});
     }
-    rotate_wheels();
-    cal_score();
-    cout << score << endl;
+    
+    for(int i=0; i<K; i++) {
+        rotate_wheels(cmds[i].first, cmds[i].second);
+    }
+    
+    cout << calculate_score() << endl;
     
     return 0;
 }
