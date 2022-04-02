@@ -2,75 +2,71 @@
 //  main.cpp
 //  BJ14502
 //
-//  Created by Hwayeon on 2021/07/27.
+//  Created by 최화연 on 2022/04/02.
 //
 
 #include <iostream>
 #include <vector>
 #include <queue>
+#include <string.h>
 using namespace std;
 
+int max_safe_num = 0;
 int N, M;
-int map[8][8] = {0,};
+int lab[8][8] = {0, };
+int copy_lab[8][8] = {0, };
+vector<pair<int, int>> virus;
 int dx[4] = {-1, 0, 1, 0};
 int dy[4] = {0, -1, 0, 1};
-int cmp_map[8][8] = {0,};
-int answer = 0;
-vector<pair<int, int>> virus;
 
-void copy_map(){
-    for(int i=0; i<N; i++){
-        for(int j=0; j<M; j++){
-            cmp_map[i][j] = map[i][j];
-        }
-    }
-}
-
-void spread_virus(){
+void spread_virus(int sy, int sx) {
     queue<pair<int, int>> q;
-    for(int i=0; i<virus.size(); i++){
-        q.push(virus[i]);
-    }
-    while(!q.empty()){
+    q.push({sx, sy});
+    while(!q.empty()) {
         int x = q.front().first;
         int y = q.front().second;
         q.pop();
-        for(int i=0; i<4; i++){
-            int nx = x+dx[i];
-            int ny = y+dy[i];
-            if(nx<0 || nx>=M || ny<0 || ny>=N) continue;
-            if(cmp_map[ny][nx] == 0){
-                cmp_map[ny][nx] = 2;
-                q.push(make_pair(nx, ny));
+        for(int i=0; i<4; i++) {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+            if (nx < 0 || nx >= M || ny < 0 || ny >= N) continue;
+            if (copy_lab[ny][nx] == 0) {
+                copy_lab[ny][nx] = 2;
+                q.push({nx, ny});
             }
         }
     }
 }
 
-void count_safe_area(){
-    int safe_area = 0;
-    for(int i=0; i<N; i++){
-        for(int j=0; j<M; j++){
-            if(cmp_map[i][j] == 0) safe_area++;
+int get_safe_area() {
+    int cnt = 0;
+    for(int i=0; i<N; i++) {
+        for(int j=0; j<M; j++) {
+            if (copy_lab[i][j] == 0) {
+                cnt ++;
+            }
         }
     }
-    if(answer < safe_area) answer = safe_area;
+    return cnt;
 }
 
-void build_wall(int cnt){
-    if(cnt == 3){
-        //spread virus
-        copy_map();
-        spread_virus();
-        count_safe_area();
+void build_walls(int x, int y, int cnt) {
+    if (cnt == 3) {
+        memcpy(copy_lab, lab, sizeof(copy_lab));
+        for(int i=0; i<virus.size(); i++) {
+            spread_virus(virus[i].first, virus[i].second);
+        }
+        int safe_area = get_safe_area();
+        if (safe_area > max_safe_num) max_safe_num = safe_area;
         return;
     }
-    for(int i=0; i<N; i++){
-        for(int j=0; j<M; j++){
-            if(map[i][j] == 0){
-                map[i][j] = 1;
-                build_wall(cnt+1);
-                map[i][j] = 0;
+    for(int i=y; i<N; i++) {
+        if(i > y) x = 0;
+        for(int j=x; j<M; j++) {
+            if (lab[i][j] == 0) {
+                lab[i][j] = 1;
+                build_walls((j+1)%M, i, cnt+1);
+                lab[i][j] = 0;
             }
         }
     }
@@ -78,15 +74,17 @@ void build_wall(int cnt){
 
 int main(int argc, const char * argv[]) {
     cin >> N >> M;
-    for(int i=0; i<N; i++){
-        for(int j=0; j<M; j++){
-            cin >> map[i][j];
-            if(map[i][j] == 2){
-                virus.push_back(make_pair(j, i));
+    for(int i=0; i<N; i++) {
+        for(int j=0; j<M; j++) {
+            cin >> lab[i][j];
+            if (lab[i][j] == 2) {
+                virus.push_back({i, j});
             }
         }
     }
-    build_wall(0);
-    cout << answer << endl;
+    
+    build_walls(0, 0, 0);
+    cout << max_safe_num << endl;
+    
     return 0;
 }
