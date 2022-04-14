@@ -2,7 +2,7 @@
 //  main.cpp
 //  BJ17140
 //
-//  Created by Hwayeon on 2021/08/17.
+//  Created by 최화연 on 2022/04/14.
 //
 
 #include <iostream>
@@ -10,129 +10,114 @@
 #include <queue>
 using namespace std;
 
-int A[100][100] = {0,};
-int new_A[100][100] = {0,};
-int R, C, K;
-int sec = 0;
-struct items{
+int row, col, k;
+int A[101][101] = {0, };
+int R = 3;
+int C = 3;
+
+struct Item {
     int num;
     int cnt;
 };
-struct cmp{
-    bool operator()(items x, items y){
-        //등장 횟수가 같은 경우
-        if(x.cnt == y.cnt){
-            //수가 커지는 순으로
-            return x.num > y.num;
+struct cmp {
+    bool operator() (Item a, Item b) {
+        if (a.cnt == b.cnt) {
+            return a.num > b.num;
         }
-        //등장 횟수가 커지는 순으로
-        return x.cnt > y.cnt;
+        return a.cnt > b.cnt;
     }
 };
 
-int main(int argc, const char * argv[]) {
-    cin >> R >> C >> K;
-    R--;
-    C--;
-    for(int i=0; i<3; i++){
-        for(int j=0; j<3; j++){
-            cin >> A[i][j];
-        }
-    }
-    
-    int r_cnt = 3;
-    int c_cnt = 3;
-    
-    while(sec <= 100){
-        //행 개수 구하기
-        r_cnt = 0;
-        for(int c=0; c<100; c++){
-            int cnt = 0;
-            for(int r=0; r<100; r++){
-                if(A[r][c] == 0) break;
-                cnt++;
-            }
-            if(cnt > r_cnt) r_cnt = cnt;
-        }
+int sort_A() {
+    int sec = 0;
+    while (sec < 100) {
+        if (A[row][col] == k) return sec;
+        sec ++;
         
-        //열 개수 구하기
-        c_cnt = 0;
-        for(int r=0; r<100; r++){
-            int cnt = 0;
-            for(int c=0; c<100; c++){
-                if(A[r][c] == 0) break;
-                cnt++;
-            }
-            if(cnt>c_cnt) c_cnt = cnt;
-        }
-        
-        if(r_cnt >= R && c_cnt >= C){
-            if(A[R][C] == K){
-                cout << sec << endl;
-                return 0;
-            }
-        }
-        
-        //R연산
-        if(r_cnt >= c_cnt){
-            for(int r=0; r<r_cnt; r++){
-                //1. 등장 횟수 세기
-                int visit[101] ={0,};
-                for(int c=0; c<c_cnt; c++){
+        //C 연산
+        if (R < C) {
+            int new_R = 0;
+            for (int c=1; c<=C; c++) {
+                int visit[101] = {0, };
+                for (int r=1; r<=R; r++) {
                     visit[A[r][c]]++;
                 }
-                //2. 정렬
-                priority_queue<items, vector<items>, cmp> pq;
-                for(int n=1; n<=100; n++){
-                    if(visit[n] > 0){
-                        pq.push({n, visit[n]});
-                    }
-                }
-                //3. new_A에 추가
-                int item_cnt = pq.size();
-                for(int c=0; c<item_cnt*2; c+=2){
-                    if(c==100) break;
-                    new_A[r][c] = pq.top().num;
-                    new_A[r][c+1] = pq.top().cnt;
-                    pq.pop();
-                }
-            }
-        }
-        //C연산
-        else{
-            for(int c=0; c<c_cnt; c++){
-                //1. 등장 횟수 세기
-                int visit[101] ={0,};
-                for(int r=0; r<r_cnt; r++){
-                    visit[A[r][c]]++;
-                }
-                //2. 정렬
-                priority_queue<items, vector<items>, cmp> pq;
-                for(int i=1; i<=100; i++){
-                    if(visit[i] > 0){
+                priority_queue<Item, vector<Item>, cmp> pq;
+                for (int i=1; i<101; i++) {
+                    if (visit[i] > 0) {
                         pq.push({i, visit[i]});
                     }
                 }
-                //3. new_A에 추가
-                int item_cnt = pq.size();
-                for(int r=0; r<item_cnt*2; r+=2){
-                    if(r==100) break;
-                    new_A[r][c] = pq.top().num;
-                    new_A[r+1][c] = pq.top().cnt;
+                int r = 1;
+                while (!pq.empty()) {
+                    Item item = pq.top();
                     pq.pop();
+                    if (r > 100) break;
+                    A[r][c] = item.num;
+                    if (r > new_R) new_R = r;
+                    r++;
+                    if (r > 100) break;
+                    A[r][c] = item.cnt;
+                    if (r > new_R) new_R = r;
+                    r++;
                 }
-
+                //나머지 0으로 채우기
+                for (int rr=r; rr<=100; rr++) {
+                    A[rr][c] = 0;
+                }
             }
+            R = new_R;
         }
-        //A = new_A, new_A 초기화
-        for(int i=0; i<100; i++){
-            for(int j=0; j<100; j++){
-                A[i][j] = new_A[i][j];
-                new_A[i][j] = 0;
+        
+        //R 연산
+        else {
+            int new_C = 0;
+            for (int r=1; r<=R; r++) {
+                int visit[101] = {0, };
+                for (int c=1; c<=C; c++) {
+                    visit[A[r][c]]++;
+                }
+                priority_queue<Item, vector<Item>, cmp> pq;
+                for (int i=1; i<101; i++) {
+                    if (visit[i] > 0) {
+                        pq.push({i, visit[i]});
+                    }
+                }
+                int c = 1;
+                while (!pq.empty()) {
+                    Item item = pq.top();
+                    pq.pop();
+                    if (c > 100) break;
+                    A[r][c] = item.num;
+                    if (c > new_C) new_C = c;
+                    c++;
+                    if (c > 100) break;
+                    A[r][c] = item.cnt;
+                    if (c > new_C) new_C = c;
+                    c++;
+                }
+                //나머지 0으로 채우기
+                for (int cc=c; cc<=100; cc++) {
+                    A[r][cc] = 0;
+                }
             }
+            C = new_C;
         }
-        sec++;
     }
-    cout << -1 << endl;
+    if (A[row][col] == k) return sec;
+    return -1;
+}
+
+int main(int argc, const char * argv[]) {
+    cin >> row >> col >> k;
+
+    for(int i=1; i<=3; i++) {
+        for(int j=1; j<=3; j++) {
+            cin >> A[i][j];
+        }
+    }
+        
+    cout << sort_A() << endl;
+    
     return 0;
 }
