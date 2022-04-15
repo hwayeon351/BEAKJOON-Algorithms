@@ -1,152 +1,115 @@
 //
 //  main.cpp
-//  BJ17144_1
+//  BJ17144
 //
-//  Created by Hwayeon on 2021/10/21.
+//  Created by 최화연 on 2022/04/15.
 //
 
 #include <iostream>
-#include <queue>
 #include <vector>
+#include <cstring>
 using namespace std;
 
 int R, C, T;
-int A[50][50] = {0, };
+int room[50][50] = {0, };
+int copy_room[50][50] = {0, };
 int dc[4] = {-1, 0, 1, 0};
 int dr[4] = {0, -1, 0, 1};
-int cleaner_r1 = -1;
-int cleaner_r2 = -1;
-int cleaner_c1 = -1;
-int cleaner_c2 = -1;
-vector<pair<pair<int, int>, int>> dusts;
-queue<int> temp;
-int total_dust = 0;
 
-void spread_dust(){
-    dusts.clear();
-    for(int r=0; r<R; r++){
-        for(int c=0; c<C; c++){
-            if(A[r][c] > 0){
-                int spread = 0;
-                for(int d=0; d<4; d++){
-                    int nr = r+dr[d];
-                    int nc = c+dc[d];
-                    if(nr<0 || nr>=R || nc<0 || nc>=C) continue;
-                    if(A[nr][nc] == -1) continue;
-                    dusts.push_back({{nr, nc}, A[r][c]/5});
-                    spread += (A[r][c]/5);
+struct Aircleaner {
+    vector<pair<int, int>> locs;
+};
+Aircleaner aircleaner;
+
+
+void spread_dust() {
+    memcpy(copy_room, room, sizeof(copy_room));
+    for (int r=0; r<R; r++) {
+        for (int c=0; c<C; c++) {
+            if (copy_room[r][c] > 0) {
+                //dusts.push_back({r, c});
+                int cnt = 0;
+                int spread_dust = copy_room[r][c]/5;
+                for(int d=0; d<4; d++) {
+                    int nr = r + dr[d];
+                    int nc = c + dc[d];
+                    if (nr < 0 || nr >= R || nc < 0 || nc >= C) continue;
+                    if ((nr == aircleaner.locs[0].first and nc == aircleaner.locs[0].second) || (nr == aircleaner.locs[1].first and nc == aircleaner.locs[1].second)) continue;
+                    room[nr][nc] += spread_dust;
+                    cnt ++;
                 }
-                A[r][c] -= spread;
+                room[r][c] -= cnt*spread_dust;
             }
         }
     }
-    for(int i=0; i<dusts.size(); i++){
-        A[dusts[i].first.first][dusts[i].first.second] += dusts[i].second;
-    }
 }
 
-void play_cleaner(){
-    //위쪽 바람
-    for(int c=1; c<C; c++){
-        temp.push(A[cleaner_r1][c]);
+void clean_air() {
+    //위쪽 공기 청정기
+    for (int r=aircleaner.locs[0].first-2; r>=0; r--) {
+        room[r+1][0] = room[r][0];
     }
-    for(int r=cleaner_r1-1; r>=0; r--){
-        temp.push(A[r][C-1]);
+    for (int c=1; c<C; c++) {
+        room[0][c-1] = room[0][c];
     }
-    for(int c=C-2; c>=0; c--){
-        temp.push(A[0][c]);
+    for (int r=0; r<aircleaner.locs[0].first; r++) {
+        room[r][C-1] = room[r+1][C-1];
     }
-    for(int r=1; r<cleaner_r1-1; r++){
-        temp.push(A[r][0]);
+    for (int c=C-1; c>=2; c--) {
+        room[aircleaner.locs[0].first][c] = room[aircleaner.locs[0].first][c-1];
     }
-    A[cleaner_r1][1] = 0;
-    for(int c=2; c<C; c++){
-        A[cleaner_r1][c] = temp.front();
-        temp.pop();
-    }
-    for(int r=cleaner_r1-1; r>=0; r--){
-        A[r][C-1] = temp.front();
-        temp.pop();
-    }
-    for(int c=C-2; c>=0; c--){
-        A[0][c] = temp.front();
-        temp.pop();
-    }
-    for(int r=1; r<cleaner_r1; r++){
-        A[r][0] = temp.front();
-        temp.pop();
-    }
+    room[aircleaner.locs[0].first][1] = 0;
     
-    //아래쪽 바람
-    for(int c=1; c<C; c++){
-        temp.push(A[cleaner_r2][c]);
+    //아래쪽 공기 청정기
+    for (int r=aircleaner.locs[1].first+2; r<R; r++) {
+        room[r-1][0] = room[r][0];
     }
-    for(int r=cleaner_r2+1; r<R; r++){
-        temp.push(A[r][C-1]);
+    for (int c=1; c<C; c++) {
+        room[R-1][c-1] = room[R-1][c];
     }
-    for(int c=C-2; c>=0; c--){
-        temp.push(A[R-1][c]);
+    for (int r=R-2; r>=aircleaner.locs[1].first; r--) {
+        room[r+1][C-1] = room[r][C-1];
     }
-    for(int r=R-2; r>cleaner_r2+1; r--){
-        temp.push(A[r][0]);
+    for (int c=C-1; c>=2; c--) {
+        room[aircleaner.locs[1].first][c] = room[aircleaner.locs[1].first][c-1];
     }
-    A[cleaner_r2][1] = 0;
-    for(int c=2; c<C; c++){
-        A[cleaner_r2][c] = temp.front();
-        temp.pop();
-    }
-    for(int r=cleaner_r2+1; r<R; r++){
-        A[r][C-1] = temp.front();
-        temp.pop();
-    }
-    for(int c=C-2; c>=0; c--){
-        A[R-1][c] = temp.front();
-        temp.pop();
-    }
-    for(int r=R-2; r>cleaner_r2; r--){
-        A[r][0] = temp.front();
-        temp.pop();
-    }
+    room[aircleaner.locs[1].first][1] = 0;
 }
 
-void simulate(){
-    for(int t=0; t<T; t++){
-        //1. 미세먼지 확산
+void play_aircleaner() {
+    for (int t=0; t<T; t++) {
+        //미세먼지 확산
         spread_dust();
-        //2. 공기청정기 작동
-        play_cleaner();
+        
+        //공기청정기 작동
+        clean_air();
     }
 }
 
-void get_total_dust(){
-    for(int r=0; r<R; r++){
-        for(int c=0; c<C; c++){
-            if(A[r][c] <= 0) continue;
-            total_dust += A[r][c];
+int get_dust() {
+    int dust = 0;
+    for (int r=0; r<R; r++) {
+        for (int c=0; c<C; c++) {
+            dust += room[r][c];
         }
     }
+    return dust;
 }
 
 int main(int argc, const char * argv[]) {
     cin >> R >> C >> T;
-    for(int r=0; r<R; r++){
-        for(int c=0; c<C; c++){
-            cin >> A[r][c];
-            if(A[r][c] == -1){
-                if(cleaner_c1 == -1){
-                    cleaner_c1 = c;
-                    cleaner_r1 = r;
-                }
-                else{
-                    cleaner_c2 = c;
-                    cleaner_r2 = r;
-                }
+    for (int r=0; r<R; r++) {
+        for (int c=0; c<C; c++) {
+            cin >> room[r][c];
+            if (room[r][c] == -1) {
+                aircleaner.locs.push_back({r, c});
+                room[r][c] = 0;
             }
         }
     }
-    simulate();
-    get_total_dust();
-    cout << total_dust << endl;
+    
+    play_aircleaner();
+    cout << get_dust() << endl;
     
     return 0;
 }
