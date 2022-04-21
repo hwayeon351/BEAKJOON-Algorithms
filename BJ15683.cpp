@@ -1,131 +1,82 @@
 //
 //  main.cpp
-//  BJ15683
+//  BJ15685
 //
-//  Created by Hwayeon on 2021/08/03.
+//  Created by 최화연 on 2022/04/21.
 //
 
 #include <iostream>
 #include <vector>
-#include <queue>
 using namespace std;
 
 int N, M;
 int office[8][8] = {0, };
-int c_office[8][8] = {0, };
+vector<pair<pair<int, int>, int>> cctvs;
+int hole = 0;
 
-int dx[4] = {1, 0, -1, 0};
-int dy[4] = {0, 1, 0, -1};
-
-//cctv_info[c_num][d_num][d]
-vector<vector<vector<int>>> cctv_info = {
-    {{}},
-    //cctv1
-    {{0}, {1}, {2}, {3}},
-    //cctv2
-    {{0,2}, {1,3}},
-    //cctv3
-    {{0,3}, {1,0}, {1,2}, {2,3}},
-    //cctv4
-    {{0,2,3}, {0,1,3}, {0,1,2}, {1,2,3}},
-    //cctv5
-    {{0,1,2,3}}
+int dr[4] = {0, -1, 0, 1};
+int dc[4] = {-1, 0, 1, 0};
+vector<vector<int>> cctv[6] = {
+    {},
+    {{2}, {1}, {0}, {3}},
+    {{0, 2}, {1, 3}},
+    {{1, 2}, {2, 3}, {3, 0}, {0, 1}},
+    {{0, 1, 2}, {1, 2, 3}, {2, 3, 0}, {3, 0, 1}},
+    {{0, 1, 2, 3}}
 };
+vector<int> direction;
 
-//cctvs[i] = {c_num, {x, y}}
-vector<pair<int, pair<int, int>>> cctvs;
 int answer = 64;
 
-int cal_blind_spot(){
+int operate_cctvs() {
+    int visits[8][8] = {0, };
     int cnt = 0;
-    for(int i=0; i<N; i++){
-        for(int j=0; j<M; j++){
-            if(c_office[i][j] == 0){
-                cnt ++;
+    for (int i=0; i<cctvs.size(); i++) {
+        for (int d=0; d<cctv[cctvs[i].second][direction[i]].size(); d++) {
+            int dir = cctv[cctvs[i].second][direction[i]][d];
+            int r = cctvs[i].first.first + dr[dir];
+            int c = cctvs[i].first.second + dc[dir];
+            while (r >= 0 && r < N && c >= 0 && c < M) {
+                if (office[r][c] == 6) break;
+                if (office[r][c] == 0 && !visits[r][c]) {
+                    visits[r][c] = 1;
+                    cnt ++;
+                }
+                r += dr[dir];
+                c += dc[dir];
             }
         }
     }
-    return cnt;
+    return hole - cnt;
 }
 
-void copy_office(){
-    for(int i=0; i<N; i++){
-        for(int j=0; j<M; j++){
-            c_office[i][j] = office[i][j];
-        }
-    }
-}
-
-void turn_direction(){
-    if(cctvs.size()==0){
-        copy_office();
-        answer = cal_blind_spot();
+void choose_direction(int i) {
+    if (i == cctvs.size()) {
+        int result = operate_cctvs();
+        if (answer > result) answer = result;
         return;
     }
-    queue<vector<pair<int, int>>> q;
-    vector<pair<int, int>> cc;
-    int c_num = cctvs[0].first;
-    int d_kinds = int(cctv_info[c_num].size());
-    int d_num;
-    for(int i=0; i<d_kinds; i++){
-        cc.clear();
-        cc.push_back({c_num, i});
-        q.push(cc);
-    }
-    while(!q.empty()){
-        cc.clear();
-        cc = q.front();
-        q.pop();
-        if(cc.size() == cctvs.size()){
-            copy_office();
-            for(int i=0; i<cctvs.size(); i++){
-                c_num = cc[i].first;
-                d_num = cc[i].second;
-                int x = cctvs[i].second.first;
-                int y = cctvs[i].second.second;
-                for(int d=0; d<cctv_info[c_num][d_num].size(); d++){
-                    int nx = x+dx[cctv_info[c_num][d_num][d]];
-                    int ny = y+dy[cctv_info[c_num][d_num][d]];
-                    while(true){
-                        //사무실을 벗어난 경우
-                        if(ny < 0 or ny > N-1 or nx < 0 or nx > M-1) break;
-                        
-                        //벽인 경우
-                        if(c_office[ny][nx] == 6) break;
-                        //빈 칸인 경우
-                        else if(c_office[ny][nx] == 0) c_office[ny][nx] = 9;
-                        
-                        nx += dx[cctv_info[c_num][d_num][d]];
-                        ny += dy[cctv_info[c_num][d_num][d]];
-                    }
-                }
-            }
-            int b_spot = cal_blind_spot();
-            if(answer > b_spot) answer = b_spot;
-            continue;
-        }
-        c_num = cctvs[int(cc.size())].first;
-        d_kinds = int(cctv_info[c_num].size());
-        for(int i=0; i<d_kinds; i++){
-            cc.push_back({c_num, i});
-            q.push(cc);
-            cc.pop_back();
-        }
+    for (int d=0; d<cctv[cctvs[i].second].size(); d++) {
+        direction.push_back(d);
+        choose_direction(i+1);
+        direction.pop_back();
     }
 }
 
 int main(int argc, const char * argv[]) {
     cin >> N >> M;
-    for(int i=0; i<N; i++){
-        for(int j=0; j<M; j++){
+    for (int i=0; i<N; i++) {
+        for (int j=0; j<M; j++) {
             cin >> office[i][j];
-            //cctv인 경우
-            if(office[i][j] >= 1 and office[i][j] <= 5){
-                cctvs.push_back({office[i][j], {j, i}});
+            if (office[i][j] == 0) hole ++;
+            else if (office[i][j] >= 1 && office[i][j] <= 5) {
+                cctvs.push_back({{i, j}, office[i][j]});
             }
         }
     }
-    turn_direction();
+    
+    choose_direction(0);
     cout << answer << endl;
+    
     return 0;
 }
