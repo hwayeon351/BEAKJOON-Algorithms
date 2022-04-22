@@ -2,61 +2,54 @@
 //  main.cpp
 //  BJ15685
 //
-//  Created by Hwayeon on 2021/08/12.
+//  Created by 최화연 on 2022/04/21.
 //
 
 #include <iostream>
-#include <vector>
+#include <deque>
 using namespace std;
 
 int N;
-vector<pair<int, int>> dragon_curve;
-
-int board[102][102] = {0,};
+int board[102][102] = {0, };
 int dx[4] = {1, 0, -1, 0};
 int dy[4] = {0, -1, 0, 1};
 
-void make_dragon_curve(int g){
-    while(g > 0){
-        int lx = dragon_curve.back().first;
-        int ly = dragon_curve.back().second;
-        int d_size = dragon_curve.size();
-        for(int i=d_size-2; i>=0; i--){
-            //평행이동
-            int x = dragon_curve[i].first - lx;
-            int y = dragon_curve[i].second - ly;
-            //회전변환 후 평행이동
-            int nx = -y + lx;
-            int ny = x + ly;
-            dragon_curve.push_back({nx, ny});
-            board[ny][nx] = 1;
-        }
-        g--;
-    }
-}
+deque<int> curve;
+int answer = 0;
 
-int cal_area(){
-    int area = 0;
-    for(int i=0; i<101; i++){
-        for(int j=0; j<101; j++){
-            if(board[i][j] && board[i][j+1] && board[i+1][j] && board[i+1][j+1]) area++;
-        }
-    }
-    return area;
-}
 
 int main(int argc, const char * argv[]) {
     cin >> N;
-    for(int i=0; i<N; i++){
+    for (int i=0; i<N; i++) {
         int x, y, d, g;
         cin >> x >> y >> d >> g;
-        dragon_curve.clear();
-        dragon_curve.push_back(make_pair(x, y));
-        board[y][x] = 1;
-        dragon_curve.push_back(make_pair(x+dx[d], y+dy[d]));
-        board[y+dy[d]][x+dx[d]] = 1;
-        make_dragon_curve(g);
+        
+        curve.push_back(d);
+        for (int j=0; j<g; j++) {
+            int idx = curve.size()-1;
+            for (int k=idx; k>=0; k--) {
+                curve.push_back((curve[k]+1)%4);
+            }
+        }
+        
+        board[y][x] ++;
+        for (int j=0; j<curve.size(); j++) {
+            x += dx[curve[j]];
+            y += dy[curve[j]];
+            board[y][x] ++;
+        }
+        curve.clear();
     }
-    cout << cal_area() << endl;
+    
+    for (int y=0; y<=100; y++) {
+        for (int x=0; x<=100; x++) {
+            if (board[y][x] > 0 && board[y][x+1] > 0 && board[y+1][x] > 0 && board[y+1][x+1] > 0) {
+                answer ++;
+            }
+        }
+    }
+    
+    cout << answer << endl;
+    
     return 0;
 }
