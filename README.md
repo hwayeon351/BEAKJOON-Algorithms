@@ -240,3 +240,5 @@ BJ12100 2048 (Easy) -> https://hwayomingdlog.tistory.com/184
 BJ16236 아기 상어 -> https://hwayomingdlog.tistory.com/189
 
 BJ19236 청소년 상어 -> https://hwayomingdlog.tistory.com/193
+
+BJ23288 주사위 굴리기 2 -> 
