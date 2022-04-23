@@ -2,99 +2,87 @@
 //  main.cpp
 //  BJ14499
 //
-//  Created by Hwayeon on 2021/07/21.
+//  Created by 최화연 on 2022/04/23.
 //
 
 #include <iostream>
-#include <deque>
 using namespace std;
 
-int map[20][20] = {0,};
 int N, M, K;
-int dx[4] = {1, -1, 0, 0};
-int dy[4] = {0, 0, -1, 1};
 
-struct dices{
+struct Dice {
     int x;
     int y;
-    int nums[6] = {0,};
+    int side[7] = {0, };
 };
-dices dice;
-deque<int> command;
+Dice dice;
 
-void change_dice(int d){
-    switch(d){
-        int temp;
-        //동쪽
-        case 0:
-            temp = dice.nums[5];
-            dice.nums[5] = dice.nums[3];
-            dice.nums[3] = dice.nums[2];
-            dice.nums[2] = dice.nums[1];
-            dice.nums[1] = temp;
-            break;
-        //서쪽
+int map[20][20] = {0, };
+int dx[5] = {0, 0, 0, -1, 1};
+int dy[5] = {0, 1, -1, 0, 0};
+
+bool move_dice(int dir) {
+    dice.x += dx[dir];
+    dice.y += dy[dir];
+    
+    if (dice.x < 0 || dice.x >= N || dice.y < 0 || dice.y >= M) {
+        dice.x -= dx[dir];
+        dice.y -= dy[dir];
+        return false;
+    }
+    
+    int temp = dice.side[1];
+    switch (dir) {
         case 1:
-            temp = dice.nums[1];
-            dice.nums[1] = dice.nums[2];
-            dice.nums[2] = dice.nums[3];
-            dice.nums[3] = dice.nums[5];
-            dice.nums[5] = temp;
+            dice.side[1] = dice.side[4];
+            dice.side[4] = dice.side[6];
+            dice.side[6] = dice.side[3];
+            dice.side[3] = temp;
             break;
-        //북쪽
+            
         case 2:
-            temp = dice.nums[0];
-            dice.nums[0] = dice.nums[2];
-            dice.nums[2] = dice.nums[4];
-            dice.nums[4] = dice.nums[5];
-            dice.nums[5] = temp;
+            dice.side[1] = dice.side[3];
+            dice.side[3] = dice.side[6];
+            dice.side[6] = dice.side[4];
+            dice.side[4] = temp;
             break;
-        //남쪽
+            
         case 3:
-            temp = dice.nums[5];
-            dice.nums[5] = dice.nums[4];
-            dice.nums[4] = dice.nums[2];
-            dice.nums[2] = dice.nums[0];
-            dice.nums[0] = temp;
+            dice.side[1] = dice.side[5];
+            dice.side[5] = dice.side[6];
+            dice.side[6] = dice.side[2];
+            dice.side[2] = temp;
+            break;
+            
+        case 4:
+            dice.side[1] = dice.side[2];
+            dice.side[2] = dice.side[6];
+            dice.side[6] = dice.side[5];
+            dice.side[5] = temp;
             break;
     }
+    
+    return true;
 }
-
-void roll_dice(){
-    while(!command.empty()){
-        int cmd = command.front();
-        command.pop_front();
-        int nx = dice.x + dx[cmd];
-        int ny = dice.y + dy[cmd];
-        if(nx<0 || nx>M-1 || ny<0 || ny>N-1) continue;
-        dice.x = nx;
-        dice.y = ny;
-        change_dice(cmd);
-
-        if(map[ny][nx] == 0){
-            map[ny][nx] = dice.nums[5];
-        }
-        else{
-            dice.nums[5] = map[ny][nx];
-            map[ny][nx] = 0;
-        }
-        cout << dice.nums[2] << endl;
-    }
-}
-
 
 int main(int argc, const char * argv[]) {
-    cin >> N >> M >> dice.y >> dice.x >> K;
-    for(int i=0; i<N; i++){
-        for(int j=0; j<M; j++){
+    cin >> N >> M >> dice.x >> dice.y >> K;
+    for (int i=0; i<N; i++) {
+        for (int j=0; j<M; j++) {
             cin >> map[i][j];
         }
     }
-    for(int i=0; i<K; i++){
-        int c;
-        cin >> c;
-        command.push_back(c-1);
+    for (int k=0; k<K; k++) {
+        int dir;
+        cin >> dir;
+        if (move_dice(dir)) {
+            if (map[dice.x][dice.y] == 0) map[dice.x][dice.y] = dice.side[6];
+            else {
+                dice.side[6] = map[dice.x][dice.y];
+                map[dice.x][dice.y] = 0;
+            }
+            cout << dice.side[1] << endl;
+        }
     }
-    roll_dice();
     return 0;
 }
