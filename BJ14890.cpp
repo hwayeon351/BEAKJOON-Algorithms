@@ -2,164 +2,164 @@
 //  main.cpp
 //  BJ14890
 //
-//  Created by Hwayeon on 2021/09/18.
+//  Created by 최화연 on 2022/04/24.
 //
 
 #include <iostream>
-#include <math.h>
-#include <string.h>
 using namespace std;
 
-int map[100][100] = {0, };
-int visit[100] = {0, };
-int road = 0;
 int N, L;
+int map[100][100] = {0, };
+int answer = 0;
 
-void check_road(){
-    for(int r=0; r<N; r++){
-        memset(visit, 0, sizeof(visit));
-        int check = true;
-        int before = map[r][0];
-        int cnt = 1;
+void find_route_row() {
+    //row에 대하여
+    for (int r=0; r<N; r++) {
+        int visits[100] = {0, };
         int c = 1;
-        while(c < N){
-            if(map[r][c] == before){
-                cnt ++;
-                c ++;
-                continue;
-            }
-            //높이 차이가 2 이상인 경우, 길이 아니다
-            else if(abs(map[r][c] - before) > 1){
+        int before_h = map[r][0];
+        int cnt = 1;
+        bool check = true;
+        while (c < N) {
+            int differ = abs(map[r][c] - before_h);
+            if (differ > 1) {
                 check = false;
                 break;
             }
-            //높이 차이가 1인 경우,
-            else{
-                //오르막길 인 경우,
-                if(map[r][c] - before == 1){
-                    //경사로를 놓을 수 있는 경우,
-                    if(cnt >= L){
-                        for(int cc=c-L; cc<c; cc++){
-                            //이미 경사로가 설치되어 있는 경우, 설치 불가 -> 길이 아니다
-                            if(visit[cc]){
+            else if (differ == 0) cnt ++;
+            else {
+                //왼쪽에 경사로 설치
+                if (map[r][c] > before_h) {
+                    if (cnt < L) {
+                        check = false;
+                        break;
+                    }
+                    else {
+                        //check visits
+                        for (int l=1; l<=L; l++) {
+                            int cc = c - l;
+                            if (visits[cc]) {
                                 check = false;
                                 break;
                             }
-                            visit[cc] = 1;
+                            visits[cc] = 1;
                         }
-                        //경사로 설치 완료
-                        before = map[r][c];
+                        if (!check) break;
+                        before_h = map[r][c];
                         cnt = 1;
-                        c ++;
-                        continue;
-                    }
-                    //경사로를 놓을 수 없는 경우, 길이 아니다
-                    else{
-                        check = false;
-                        break;
                     }
                 }
-                //내리막길 인 경우,
-                else{
-                    int cc;
-                    for(cc=c+1; cc<c+L; cc++){
-                        if(map[r][cc] == map[r][c]) continue;
-                        check = false;
-                        break;
+                //오른쪽에 경사로 설치
+                else {
+                    before_h = map[r][c];
+                    for (int l=0; l<L; l++) {
+                        int cc = c + l;
+                        if (cc >= N || map[r][cc] != before_h) {
+                            check = false;
+                            break;
+                        }
+                        visits[cc] = 1;
                     }
-                    if(!check) break;
-                    //경사로를 놓을 수 있는 경우, 경사로 설치
-                    for(cc=c; cc<c+L; cc++){
-                        visit[cc] = 1;
+                    if (!check) break;
+                    if (c+L < N) {
+                        if (before_h > map[r][c+L-1]) {
+                            check = false;
+                            break;
+                        }
                     }
-                    before = map[r][c];
-                    cnt = L;
-                    c++;
-                    continue;
+                    cnt = 0;
+                    c += (L-1);
                 }
             }
+            c++;
         }
-        if(check) {
-            road++;
+        
+        if (check) {
+            answer ++;
         }
     }
-    for(int c=0; c<N; c++){
-        memset(visit, 0, sizeof(visit));
-        int check = true;
-        int before = map[0][c];
-        int cnt = 1;
+}
+
+void find_route_col() {
+    //col에 대하여
+    for (int c=0; c<N; c++) {
+        int visits[100] = {0, };
         int r = 1;
-        while(r < N){
-            if(map[r][c] == before){
-                cnt ++;
-                r ++;
-                continue;
-            }
-            //높이 차이가 2 이상인 경우, 길이 아니다
-            else if(abs(map[r][c] - before) > 1){
+        int before_h = map[0][c];
+        int cnt = 1;
+        bool check = true;
+        while (r < N) {
+            int differ = abs(map[r][c] - before_h);
+            if (differ > 1) {
                 check = false;
                 break;
             }
-            //높이 차이가 1인 경우,
-            else{
-                //오르막길 인 경우,
-                if(map[r][c] - before == 1){
-                    //경사로를 놓을 수 있는 경우,
-                    if(cnt >= L){
-                        for(int rr=r-L; rr<r; rr++){
-                            //이미 경사로가 설치되어 있는 경우, 설치 불가 -> 길이 아니다
-                            if(visit[rr]){
+            else if (differ == 0) cnt ++;
+            else {
+                //위쪽에 경사로 설치
+                if (map[r][c] > before_h) {
+                    if (cnt < L) {
+                        check = false;
+                        break;
+                    }
+                    else {
+                        //check visits
+                        for (int l=1; l<=L; l++) {
+                            int rr = r - l;
+                            if (visits[rr]) {
                                 check = false;
                                 break;
                             }
-                            visit[rr] = 1;
+                            visits[rr] = 1;
                         }
-                        //경사로 설치 완료
-                        before = map[r][c];
+                        if (!check) break;
+                        before_h = map[r][c];
                         cnt = 1;
-                        r ++;
-                        continue;
-                    }
-                    //경사로를 놓을 수 없는 경우, 길이 아니다
-                    else{
-                        check = false;
-                        break;
                     }
                 }
-                //내리막길 인 경우,
-                else{
-                    int rr;
-                    for(rr=r+1; rr<r+L; rr++){
-                        if(map[rr][c] == map[r][c]) continue;
-                        check = false;
-                        break;
+                //아래쪽에 경사로 설치
+                else {
+                    before_h = map[r][c];
+                    for (int l=0; l<L; l++) {
+                        int rr = r + l;
+                        if (rr >= N || map[rr][c] != before_h) {
+                            check = false;
+                            break;
+                        }
+                        visits[rr] = 1;
                     }
-                    if(!check) break;
-                    //경사로를 놓을 수 있는 경우, 경사로 설치
-                    for(rr=r; rr<r+L; rr++){
-                        visit[rr] = 1;
+                    if (!check) break;
+                    if (r+L < N) {
+                        if (before_h > map[r+L-1][c]) {
+                            check = false;
+                            break;
+                        }
                     }
-                    before = map[r][c];
-                    cnt = L;
-                    r++;
-                    continue;
+                    cnt = 0;
+                    r += (L-1);
                 }
             }
+            r++;
         }
-        if(check) {
-            road++;
+
+        if (check) {
+            answer ++;
         }
     }
 }
 
 int main(int argc, const char * argv[]) {
     cin >> N >> L;
-    for(int i=0; i<N; i++){
-        for(int j=0; j<N; j++){
+    for (int i=0; i<N; i++) {
+        for (int j=0; j<N; j++) {
             cin >> map[i][j];
         }
     }
-    check_road();
-    cout << road << endl;
+    
+    find_route_row();
+    find_route_col();
+    
+    cout << answer << endl;
+    
     return 0;
 }
