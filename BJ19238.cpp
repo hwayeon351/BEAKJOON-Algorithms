@@ -1,156 +1,130 @@
 //
 //  main.cpp
-//  BJ19238_1
+//  BJ19238
 //
-//  Created by Hwayeon on 2021/10/21.
+//  Created by 최화연 on 2022/04/24.
 //
 
 #include <iostream>
 #include <queue>
-#include <string.h>
 using namespace std;
 
 int N, M;
-long long gas;
-int area[22][22] = {0, };
-int visit[22][22] = {0, };
-int texi_x, texi_y;
-
-struct Customer{
-    int num;
-    int start_x;
-    int start_y;
-    int dest_x;
-    int dest_y;
-    int dis = 0;
-    bool done = false;
+struct Texi {
+    int r;
+    int c;
+    int fuel;
 };
-struct cmp{
-    bool operator()(Customer c1, Customer c2){
-        if(c1.dis == c2.dis){
-            if(c1.start_y == c2.start_y){
-                return c1.start_x > c2.start_x;
+Texi texi;
+
+struct Customer {
+    int sr;
+    int sc;
+    int er;
+    int ec;
+    int s_dis;
+};
+struct cmp {
+    bool operator() (Customer c1, Customer c2) {
+        if (c1.s_dis == c2.s_dis) {
+            if (c1.sr == c2.sr) {
+                return c1.sc > c2.sc;
             }
-            return c1.start_y > c2.start_y;
+            return c1.sr > c2.sr;
         }
-        return c1.dis > c2.dis;
+        return c1.s_dis > c2.s_dis;
     }
 };
-Customer cus;
-Customer customers[401];
+Customer customer;
+priority_queue<Customer, vector<Customer>, cmp> pq;
 
-int dx[4] = {-1, 0, 1, 0};
-int dy[4] = {0, -1, 0, 1};
+int map[21][21] = {0, };
+int dr[4] = {0, -1, 0, 1};
+int dc[4] = {-1, 0, 1, 0};
 
-int cnt = 0;
-
-Customer find_customer(){
-    priority_queue<Customer, vector<Customer>, cmp> pq;
-    for(int i=0; i<M; i++){
-        if(customers[i].done) continue;
-        cus = customers[i];
-        memset(visit, 0, sizeof(visit));
-        queue<pair<pair<int, int>, int>> q;
-        q.push({{texi_x, texi_y}, 0});
-        visit[texi_y][texi_x] = 1;
-        while(!q.empty()){
-            int x = q.front().first.first;
-            int y = q.front().first.second;
-            int dis = q.front().second;
-            q.pop();
-            if(x==cus.start_x && y==cus.start_y){
-                cus.dis = dis;
-                pq.push(cus);
-                break;
-            }
-            for(int d=0; d<4; d++){
-                int nx = x+dx[d];
-                int ny = y+dy[d];
-                if(nx<1 || nx>N || ny<1 || ny>N) continue;
-                if(area[ny][nx]) continue;
-                if(visit[ny][nx]) continue;
-                visit[ny][nx] = 1;
-                q.push({{nx, ny}, dis+1});
-            }
+int get_dis_bfs(int sr, int sc, int er, int ec) {
+    int visits[21][21] = {0, };
+    queue<pair<pair<int, int>, int>> q;
+    q.push({{sr, sc}, 0});
+    visits[sr][sc] = 1;
+    
+    while (!q.empty()) {
+        int r = q.front().first.first;
+        int c = q.front().first.second;
+        int dis = q.front().second;
+        q.pop();
+        if (r == er && c == ec) return dis;
+        for (int d=0; d<4; d++) {
+            int nr = r + dr[d];
+            int nc = c + dc[d];
+            if (nr < 1 || nr > N || nc < 1 || nc > N) continue;
+            if (visits[nr][nc] || map[nr][nc]) continue;
+            visits[nr][nc] = 1;
+            q.push({{nr, nc}, dis+1});
         }
     }
-    if(pq.empty()){
-        cus.num = -1;
-        return cus;
-    }
-    return pq.top();
+    
+    return -1;
 }
 
-void start_texi(){
-    while(cnt < M){
-        cus = find_customer();
-        if(cus.num == -1){
-            gas = -1;
-            break;
-        }
-        //1. 손님 태우러 이동
-        gas -= cus.dis;
-        if(gas < 0){
-            gas = -1;
-            break;
-        }
-        texi_x = cus.start_x;
-        texi_y = cus.start_y;
+void start_texi() {
+    while (!pq.empty()) {
+        customer = pq.top();
+        pq.pop();
         
-        //2. 목적지로 이동
-        memset(visit, 0, sizeof(visit));
-        queue<pair<pair<int, int>, int>> q;
-        q.push({{texi_x, texi_y}, 0});
-        visit[texi_y][texi_x] = 1;
-        int dest_dis = 0;
-        while(!q.empty()){
-            int x = q.front().first.first;
-            int y = q.front().first.second;
-            int dis = q.front().second;
-            q.pop();
-            if(x==cus.dest_x && y==cus.dest_y){
-                gas -= dis;
-                dest_dis = dis;
-                texi_x = x;
-                texi_y = y;
-                customers[cus.num].done = true;
-                break;
-            }
-            for(int d=0; d<4; d++){
-                int nx = x+dx[d];
-                int ny = y+dy[d];
-                if(nx<1 || nx>N || ny<1 || ny>N) continue;
-                if(area[ny][nx]) continue;
-                if(visit[ny][nx]) continue;
-                visit[ny][nx] = 1;
-                q.push({{nx, ny}, dis+1});
-            }
+        if (customer.s_dis > texi.fuel) {
+            texi.fuel = -1;
+            return;
         }
-        if(dest_dis == 0 || gas < 0){
-            gas = -1;
-            break;
+        
+        texi.r = customer.sr;
+        texi.c = customer.sc;
+        texi.fuel -= customer.s_dis;
+        
+        int e_dis = get_dis_bfs(texi.r, texi.c, customer.er, customer.ec);
+        if (e_dis == -1 || e_dis > texi.fuel) {
+            texi.fuel = -1;
+            return;
         }
-        cnt++;
-        gas += (2*dest_dis);
+        
+        texi.fuel += e_dis;
+        texi.r = customer.er;
+        texi.c = customer.ec;
+        
+        priority_queue<Customer, vector<Customer>, cmp> new_pq;
+        while (!pq.empty()) {
+            customer = pq.top();
+            pq.pop();
+            customer.s_dis = get_dis_bfs(texi.r, texi.c, customer.sr, customer.sc);
+            new_pq.push(customer);
+        }
+        pq = new_pq;
     }
 }
 
 int main(int argc, const char * argv[]) {
-    cin >> N >> M >> gas;
-    for(int y=1; y<=N; y++){
-        for(int x=1; x<=N; x++){
-            cin >> area[y][x];
+    cin >> N >> M >> texi.fuel;
+    
+    for (int r=1; r<=N; r++) {
+        for (int c=1; c<=N; c++) {
+            cin >> map[r][c];
         }
     }
-    cin >> texi_y >> texi_x;
-    for(int i=0; i<M; i++){
-        cin >> cus.start_y >> cus.start_x >> cus.dest_y >> cus.dest_x;
-        cus.num = i;
-        customers[i] = cus;
+    
+    cin >> texi.r >> texi.c;
+    
+    for (int m=0; m<M; m++) {
+        cin >> customer.sr >> customer.sc >> customer.er >> customer.ec;
+        customer.s_dis = get_dis_bfs(texi.r, texi.c, customer.sr, customer.sc);
+        if (customer.s_dis == -1) {
+            cout << -1 << endl;
+            return 0;
+        }
+        pq.push(customer);
     }
     
     start_texi();
-    cout << gas << endl;
-    
+    cout << texi.fuel << endl;
+
     return 0;
 }
