@@ -1,8 +1,8 @@
 //
 //  main.cpp
-//  BJ19237_1
+//  BJ19237
 //
-//  Created by Hwayeon on 2021/10/19.
+//  Created by 최화연 on 2022/04/25.
 //
 
 #include <iostream>
@@ -10,116 +10,144 @@
 using namespace std;
 
 int N, M, k;
-int dx[5] = {0, 0, 0, -1, 1};
-int dy[5] = {0, -1, 1, 0, 0};
 
-struct Shark{
-    int num;
-    int x;
-    int y;
-    int d;
-    int priority[5][4] = {0, };
+struct Smell {
+    int timer = 0;
+    int shark = 0;
 };
+Smell smell;
+Smell board[20][20];
 
-//board[y][x]= {shark_num, smell_timer}
-int board[20][20][2] = {0, };
-deque<Shark> sharks;
-deque<Shark> copy_sharks;
-int sec = 0;
+int dr[5] = {0, -1, 1, 0, 0};
+int dc[5] = {0, 0, 0, -1, 1};
 
-void move_sharks(){
-    while(sharks.size() > 1){
-        if(sec >= 1000){
-            sec = -1;
-            break;
-        }
-        //1. 상어 이동 방향 정하기
-        while(!sharks.empty()){
-            Shark now_shark = sharks.front();
-            sharks.pop_front();
+struct Shark {
+    int r;
+    int c;
+    int num;
+    int dir;
+    int priority[5][4];
+};
+Shark shark;
+Shark sharks[401];
+
+deque<Shark> alive_sharks;
+
+int adult_sharks() {
+    int sec = 0;
+    
+    while (1) {
+        sec ++;
+        
+        //상어 이동방향 정하기
+        deque<Shark> new_sharks;
+        while (!alive_sharks.empty()) {
+            shark = alive_sharks.front();
+            alive_sharks.pop_front();
+            int my_r = -1;
+            int my_c = -1;
+            int my_d = -1;
             bool check = false;
-            for(int d=0; d<4; d++){
-                int nd = now_shark.priority[now_shark.d][d];
-                int nx = now_shark.x + dx[nd];
-                int ny = now_shark.y + dy[nd];
-                if(nx<0 || nx>=N || ny<0 || ny>=N) continue;
-                if(board[ny][nx][0] == 0){
+            for (int d=0; d<4; d++) {
+                int r = shark.r + dr[shark.priority[shark.dir][d]];
+                int c = shark.c + dc[shark.priority[shark.dir][d]];
+                if (r < 0 || r >= N || c < 0 || c >= N) continue;
+                //냄새가 없는 칸인 경우
+                if (board[r][c].shark == 0) {
+                    shark.r = r;
+                    shark.c = c;
+                    shark.dir = shark.priority[shark.dir][d];
+                    new_sharks.push_back(shark);
                     check = true;
-                    now_shark.x = nx;
-                    now_shark.y = ny;
-                    now_shark.d = nd;
                     break;
                 }
-            }
-            if(check) {
-                copy_sharks.push_back(now_shark);
-                continue;
-            }
-            //자신의 냄새가 있는칸으로
-            for(int d=0; d<4; d++){
-                int nd = now_shark.priority[now_shark.d][d];
-                int nx = now_shark.x + dx[nd];
-                int ny = now_shark.y + dy[nd];
-                if(nx<0 || nx>=N || ny<0 || ny>=N) continue;
-                if(board[ny][nx][0] == now_shark.num){
-                    now_shark.x = nx;
-                    now_shark.y = ny;
-                    now_shark.d = nd;
-                    break;
+                //자신의 냄새가 있는 칸인 경우
+                else if (board[r][c].shark == shark.num) {
+                    if (my_r == -1) {
+                        my_r = r;
+                        my_c = c;
+                        my_d = shark.priority[shark.dir][d];
+                    }
                 }
             }
-            copy_sharks.push_back(now_shark);
-        }
-        //2. 냄새 타이머 가동
-        for(int y=0; y<N; y++){
-            for(int x=0; x<N; x++){
-                if(board[y][x][0] == 0) continue;
-                board[y][x][1]--;
-                if(board[y][x][1] == 0) board[y][x][0] = 0;
+            if (!check) {
+                shark.r = my_r;
+                shark.c = my_c;
+                shark.dir = my_d;
+                new_sharks.push_back(shark);
             }
         }
-        //3. 이동하기
-        while(!copy_sharks.empty()){
-            Shark now_shark = copy_sharks.front();
-            copy_sharks.pop_front();
-            if(board[now_shark.y][now_shark.x][0] == 0 || board[now_shark.y][now_shark.x][0] == now_shark.num){
-                board[now_shark.y][now_shark.x][0] = now_shark.num;
-                board[now_shark.y][now_shark.x][1] = k;
-                sharks.push_back(now_shark);
+        
+        //이전 냄새 카운팅
+        for (int r=0; r<N; r++) {
+            for (int c=0; c<N; c++) {
+                if (board[r][c].timer > 0) {
+                    board[r][c].timer -= 1;
+                    if (board[r][c].timer == 0) {
+                        board[r][c].shark = 0;
+                    }
+                }
             }
         }
-        sec++;
+        
+        //상어 이동하고 냄새뿌리기
+        while (!new_sharks.empty()) {
+            shark = new_sharks.front();
+            new_sharks.pop_front();
+            if (board[shark.r][shark.c].shark == 0) {
+                smell.timer = k;
+                smell.shark = shark.num;
+                board[shark.r][shark.c] = smell;
+                alive_sharks.push_back(shark);
+            }
+            else if (board[shark.r][shark.c].shark == shark.num) {
+                board[shark.r][shark.c].timer = k;
+                alive_sharks.push_back(shark);
+            }
+        }
+        if (alive_sharks.size() == 1) break;
+        if (sec >= 1000) return -1;
     }
+    
+    return sec;
 }
 
 int main(int argc, const char * argv[]) {
     cin >> N >> M >> k;
-    for(int i=0; i<M; i++){
-        Shark shark;
-        shark.num = i+1;
-        sharks.push_back(shark);
-    }
-    for(int y=0; y<N; y++){
-        for(int x=0; x<N; x++){
-            cin >> board[y][x][0];
-            if(board[y][x][0] > 0){
-                sharks[board[y][x][0]-1].x = x;
-                sharks[board[y][x][0]-1].y = y;
-                board[y][x][1] = k;
+    for (int i=0; i<N; i++) {
+        for (int j=0; j<N; j++) {
+            int n;
+            cin >> n;
+            if (n > 0) {
+                shark.num = n;
+                shark.r = i;
+                shark.c = j;
+                sharks[shark.num] = shark;
             }
         }
     }
-    for(int i=0; i<M; i++){
-        cin >> sharks[i].d;
+    
+    for (int i=1; i<=M; i++) {
+        cin >> sharks[i].dir;
     }
-    for(int i=0; i<M; i++){
-        for(int d=1; d<=4; d++){
-            for(int j=0; j<4; j++){
-                cin >> sharks[i].priority[d][j];
+    
+    for (int i=1; i<=M; i++) {
+        for (int d=1; d<=4; d++) {
+            for (int dd=0; dd<4; dd++) {
+                cin >> sharks[i].priority[d][dd];
             }
         }
     }
-    move_sharks();
-    cout << sec << endl;
+    
+    for (int i=1; i<=M; i++) {
+        alive_sharks.push_back(sharks[i]);
+        
+        //자신의 위치에 냄새 뿌리기
+        board[sharks[i].r][sharks[i].c].timer = k;
+        board[sharks[i].r][sharks[i].c].shark = i;
+    }
+        
+    cout << adult_sharks() << endl;
+    
     return 0;
 }
