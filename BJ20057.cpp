@@ -1,81 +1,88 @@
 //
 //  main.cpp
-//  BJ20057_1
+//  BJ20057
 //
-//  Created by Hwayeon on 2021/10/18.
+//  Created by 최화연 on 2022/04/24.
 //
 
 #include <iostream>
 using namespace std;
 
 int N;
-int A[500][500] = {0, };
+int A[499][499] = {0, };
 
-int dx[4] = {-1, 0, 1, 0};
-int dy[4] = {0, 1, 0, -1};
-
-int spread[4][10][3] = {
-    //0-좌
-    {{0,-2,2}, {-1,-1,10}, {0,-1,7}, {1,-1,1}, {-2,0,5}, {-1,1,10}, {0,1,7}, {1,1,1}, {0,2,2}, {-1, 0, 0}},
-    //1-하
-    {{-1,-1,1}, {1,-1,1}, {-2,0,2}, {-1,0,7}, {1,0,7}, {2,0,2}, {-1,1,10}, {1,1,10}, {0,2,5}, {0,1,0}},
-    //2-우
-    {{0,-2,2}, {-1,-1,1}, {0,-1,7}, {1,-1,10}, {2,0,5}, {-1,1,1}, {0,1,7}, {1,1,10}, {0,2,2}, {1,0,0}},
-    //3-상
-    {{0,-2,5}, {-1,-1,10}, {1,-1,10}, {-2,0,2}, {-1,0,7}, {1,0,7}, {2,0,2}, {-1,1,1}, {1,1,1}, {0,-1,0}}
+//moves[d][9] -> 알파
+int moves[4][10][3] = {
+    //0 좌
+    {
+        {-1, 0, 1}, {1, 0, 1}, {-2, -1, 2}, {-1, -1, 7}, {1, -1, 7}, {2, -1, 2}, {-1, -2, 10}, {1, -2, 10}, {0, -3, 5}, {0, -2, 0}
+    },
+    //1 하
+    {
+        {0, -1, 1}, {0, 1, 1}, {1, -2, 2}, {1, -1, 7}, {1, 1, 7}, {1, 2, 2}, {2, -1, 10}, {2, 1, 10}, {3, 0, 5}, {2, 0, 0}
+    },
+    //2 우
+    {
+        {-1, 0, 1}, {1, 0, 1}, {-2, 1, 2}, {-1, 1, 7}, {1, 1, 7}, {2, 1, 2}, {-1, 2, 10}, {1, 2, 10}, {0, 3, 5}, {0, 2, 0}
+    },
+    //3 상
+    {
+        {0, -1, 1}, {0, 1, 1}, {-1, -2, 2}, {-1, -1, 7}, {-1, 1, 7}, {-1, 2, 2}, {-2, -1, 10}, {-2, 1, 10}, {-3, 0, 5}, {-2, 0, 0}
+    }
 };
 
-int tx, ty;
-int gone = 0;
+int dr[4] = {0, 1, 0, -1};
+int dc[4] = {-1, 0, 1, 0};
 
-void spread_sand(int tx, int ty, int d){
-    int ay = A[ty][tx];
-    int total_spread = 0;
-    A[ty][tx] = 0;
-    int x, y, p, sand;
-    for(int i=0; i<9; i++){
-        x = tx + spread[d][i][0];
-        y = ty + spread[d][i][1];
-        p = spread[d][i][2];
-        sand = ay*(0.01*p);
-        if(x<0 || x>=N || y<0 || y>=N) gone += sand;
-        else A[y][x] += sand;
-        total_spread += sand;
-    }
-    x = tx + spread[d][9][0];
-    y = ty + spread[d][9][1];
-    if(x<0 || x>=N || y<0 || y>=N) gone += (ay-total_spread);
-    else A[y][x] += (ay-total_spread);
-}
+int answer = 0;
 
-void move_tornado(){
-    int d = 0;
-    for(int dis=1; dis<=N; dis++){
-        int ndis = dis;
-        for(int i=0; i<2; i++){
-            if(dis == N) ndis = N-1;
-            for(int j=0; j<ndis; j++){
-                tx += dx[d];
-                ty += dy[d];
-                spread_sand(tx, ty, d);
+void tornado() {
+    int tr = N/2;
+    int tc = N/2;
+    int td = 0;
+    for (int i=1; i<=N; i++) {
+        for (int j=0; j<2; j++) {
+            int n = i;
+            if (i == N) n = N-1;
+            for (int k=0; k<n; k++) {
+                int ntr = tr+dr[td];
+                int ntc = tc+dc[td];
+                int y = A[ntr][ntc];
+                A[ntr][ntc] = 0;
+                int sand = 0;
+                for (int l=0; l<9; l++) {
+                    int r = tr + moves[td][l][0];
+                    int c = tc + moves[td][l][1];
+                    int spread = (moves[td][l][2] * 0.01) * y;
+                    if (r < 0 || r >= N || c < 0 || c >= N) answer += spread;
+                    else A[r][c] += spread;
+                    sand += spread;
+                }
+                int r = tr + moves[td][9][0];
+                int c = tc + moves[td][9][1];
+                int spread = y - sand;
+                if (r < 0 || r >= N || c < 0 || c >= N) answer += spread;
+                else A[r][c] += spread;
+                tr = ntr;
+                tc = ntc;
             }
-            if(dis == N) return;
-            d = (d+1)%4;
+            if (i == N) return;
+            //방향 바꾸기
+            td = (td + 1) % 4;
         }
     }
 }
 
 int main(int argc, const char * argv[]) {
     cin >> N;
-    for(int y=0; y<N; y++){
-        for(int x=0; x<N; x++){
-            cin >> A[y][x];
+    for (int i=0; i<N; i++) {
+        for (int j=0; j<N; j++) {
+            cin >> A[i][j];
         }
     }
-    tx = N/2;
-    ty = N/2;
-    move_tornado();
-    cout << gone << endl;
+    
+    tornado();
+    cout << answer << endl;
     
     return 0;
 }
