@@ -1,173 +1,189 @@
 //
 //  main.cpp
-//  BJ21609
+//  BJ221609
 //
-//  Created by Hwayeon on 2021/10/14.
+//  Created by 최화연 on 2022/04/26.
 //
 
 #include <iostream>
-#include <math.h>
-#include <string.h>
-#include <queue>
 #include <vector>
+#include <queue>
+#include <cstring>
 using namespace std;
 
 int N, M;
-int board[20][20] = {0, };
-int copy_board[20][20] = {0, };
-int visit[20][20] = {0, };
-int score = 0;
+int block[21][21] = {0, };
+int copy_block[21][21] = {0, };
+int visits[21][21] = {0, };
 
-struct Group{
+struct Group {
     int pr;
     int pc;
-    int rainbow_blocks_cnt = 0;
-    int blocks_cnt = 0;
-    vector<pair<int, int>> blocks;
+    int rainbow_cnt = 0;
+    int cnt = 0;
 };
-Group group;
-struct cmp{
-    bool operator()(Group g1, Group g2){
-        if(g1.blocks_cnt == g2.blocks_cnt){
-            if(g1.rainbow_blocks_cnt == g2.rainbow_blocks_cnt){
-                if(g1.pr == g2.pr){
+struct cmp {
+    bool operator() (Group g1, Group g2) {
+        if (g1.cnt == g2.cnt) {
+            if (g1.rainbow_cnt == g2.rainbow_cnt) {
+                if (g1.pr == g2.pr) {
                     return g1.pc < g2.pc;
                 }
                 return g1.pr < g2.pr;
             }
-            return g1.rainbow_blocks_cnt < g2.rainbow_blocks_cnt;
+            return g1.rainbow_cnt < g2.rainbow_cnt;
         }
-        return g1.blocks_cnt < g2.blocks_cnt;
+        return g1.cnt < g2.cnt;
     }
 };
-int dx[4] = {-1, 0, 1, 0};
-int dy[4] = {0, -1, 0, 1};
+Group group;
+
 vector<pair<int, int>> rainbow_blocks;
+int dr[4] = {-1, 0, 1, 0};
+int dc[4] = {0, -1, 0, 1};
 
-Group find_group(int sr, int sc){
-    Group new_group;
-    new_group.pr = sr;
-    new_group.pc = sc;
-    new_group.blocks_cnt = 1;
-    new_group.blocks.push_back({sr, sc});
+int total_score = 0;
+
+Group bfs(int pr, int pc) {
+    group.pr = pr;
+    group.pc = pc;
+    group.cnt = 1;
+    group.rainbow_cnt = 0;
     queue<pair<int, int>> q;
-    q.push({sr, sc});
-    visit[sr][sc] = 1;
-    while(!q.empty()){
-        int now_r = q.front().first;
-        int now_c = q.front().second;
+    
+    q.push({pr, pc});
+    visits[pr][pc] = 1;
+    
+    for (int i=0; i<rainbow_blocks.size(); i++) {
+        visits[rainbow_blocks[i].first][rainbow_blocks[i].second] = 0;
+    }
+    
+    while (!q.empty()) {
+        int r = q.front().first;
+        int c = q.front().second;
         q.pop();
-        for(int d=0; d<4; d++){
-            int nr = now_r + dy[d];
-            int nc = now_c + dx[d];
-            if(nr < 0 || nr >= N || nc < 0 || nc >= N) continue;
-            if(visit[nr][nc]) continue;
-            if(board[nr][nc] == -1) continue;
-            if(board[nr][nc] == 0){
-                visit[nr][nc] = 1;
-                new_group.blocks_cnt++;
-                new_group.rainbow_blocks_cnt++;
-                new_group.blocks.push_back({nr, nc});
-                q.push({nr, nc});
-            }
-            else if(board[nr][nc] == board[sr][sc]){
-                visit[nr][nc] = 1;
-                new_group.blocks_cnt++;
-                new_group.blocks.push_back({nr, nc});
+        for (int d=0; d<4; d++) {
+            int nr = r + dr[d];
+            int nc = c + dc[d];
+            if (nr < 1 || nr > N || nc < 1 || nc > N) continue;
+            if (visits[nr][nc]) continue;
+            if (block[nr][nc] == block[pr][pc] || block[nr][nc] == 0) {
+                visits[nr][nc] = 1;
+                if (block[nr][nc] == 0) group.rainbow_cnt ++;
+                group.cnt ++;
                 q.push({nr, nc});
             }
         }
     }
-    for(int i=0; i<rainbow_blocks.size(); i++){
-        visit[rainbow_blocks[i].first][rainbow_blocks[i].second] = 0;
-    }
-    return new_group;
+    
+    return group;
 }
 
-void apply_gravity(){
-    for(int c=0; c<N; c++){
-        for(int r=N-1; r>=0; r--){
-            if(board[r][c] == -2 || board[r][c] == -1) continue;
-            for(int rr=r; rr<N-1; rr++){
-                if(board[rr+1][c] != -2){
-                    if(rr != r){
-                        board[rr][c] = board[r][c];
-                        board[r][c] = -2;
-                    }
-                    break;
-                }
-                else if(rr == N-2){
-                    board[N-1][c] = board[r][c];
-                    board[r][c] = -2;
-                }
+void erase_blocks(Group g) {
+    int num = block[g.pr][g.pc];
+    block[g.pr][g.pc] = -2;
+    queue<pair<int, int>> q;
+    q.push({g.pr, g.pc});
+    
+    while (!q.empty()) {
+        int r = q.front().first;
+        int c = q.front().second;
+        q.pop();
+        for (int d=0; d<4; d++) {
+            int nr = r + dr[d];
+            int nc = c + dc[d];
+            if (nr < 1 || nr > N || nc < 1 || nc > N) continue;
+            if (block[nr][nc] == num || block[nr][nc] == 0) {
+                block[nr][nc] = -2;
+                q.push({nr, nc});
             }
         }
     }
 }
 
-void rotate_board(){
-    memcpy(copy_board, board, sizeof(board));
-    int rr = 0;
-    int cc = 0;
-    for(int c=N-1; c>=0; c--){
-        cc = 0;
-        for(int r=0; r<N; r++){
-            board[rr][cc] = copy_board[r][c];
-            cc++;
+void gravity() {
+    for (int c=1; c<=N; c++) {
+        for (int r=N; r>=1; r--) {
+            if (block[r][c] == -2 || block[r][c] == -1) continue;
+            for (int rr=r; rr<N; rr++) {
+                if (block[rr+1][c] != -2) break;
+                block[rr+1][c] = block[rr][c];
+                block[rr][c] = -2;
+            }
         }
-        rr++;
     }
 }
 
-void play_auto_game(){
-    while(true){
-        //1. find groups
-        memset(visit, 0, sizeof(visit));
-        priority_queue<Group, vector<Group>, cmp> groups;
-        for(int r=0; r<N; r++){
-            for(int c=0; c<N; c++){
-                if(board[r][c] == -1 || board[r][c] == 0 || board[r][c] == -2) continue;
-                if(visit[r][c]) continue;
-                group = find_group(r, c);
-                if(group.blocks_cnt >= 2) groups.push(group);
-            }
+void rotate_blocks() {
+    memcpy(copy_block, block, sizeof(copy_block));
+    for (int r=1; r<=N; r++) {
+        for (int c=N; c>=1; c--) {
+            block[N-c+1][r] = copy_block[r][c];
         }
-        if(groups.empty()) break;
-        //2. erase blocks in group and get score
-        group = groups.top();
-        score += pow(group.blocks_cnt, 2);
-        for(int i=0; i<group.blocks.size(); i++){
-            board[group.blocks[i].first][group.blocks[i].second] = -2;
-        }
-        //3. apply gravity
-        apply_gravity();
-        //4. rotate 90 degrees
-        rotate_board();
-        //5. re-apply gravity
-        apply_gravity();
-        //6. update rainbow blocks location
-        rainbow_blocks.clear();
-        for(int r=0; r<N; r++){
-            for(int c=0; c<N; c++){
-                if(board[r][c]==0){
-                    rainbow_blocks.push_back({r, c});
-                }
+    }
+}
+
+void get_rainbow_blocks() {
+    rainbow_blocks.clear();
+    for (int r=1; r<=N; r++) {
+        for (int c=1; c<=N; c++) {
+            if (block[r][c] == 0) {
+                rainbow_blocks.push_back({r, c});
             }
         }
     }
 }
+
+
+void auto_play() {
+    while (1) {
+        //1. 크기가 가장 큰 블록그룹 찾기
+        priority_queue<Group, vector<Group>, cmp> pq;
+        memset(visits, 0, sizeof(visits));
+        
+        for (int r=1; r<=N; r++) {
+            for (int c=1; c<=N; c++) {
+                if (block[r][c] <= 0) continue;
+                if (visits[r][c]) continue;
+                group = bfs(r, c);
+                if (group.cnt >= 2) pq.push(group);
+            }
+        }
+        if (pq.empty()) break;
+    
+        //2. 블록 그룹의 블록 제거하기
+        erase_blocks(pq.top());
+        total_score += (pq.top().cnt * pq.top().cnt);
+        
+        //3. 중력 작용하기
+        gravity();
+        
+        //4. 90도 반시계 방향으로 회전
+        rotate_blocks();
+        
+        //5. 중력 작용하기
+        gravity();
+        
+        //무지개블록 위치
+        get_rainbow_blocks();
+    }
+}
+
 
 int main(int argc, const char * argv[]) {
     cin >> N >> M;
-    for(int i=0; i<N; i++){
-        for(int j=0; j<N; j++){
-            cin >> board[i][j];
-            if(board[i][j] == 0){
-                rainbow_blocks.push_back({i, j});
+    for (int r=1; r<=N; r++) {
+        for (int c=1; c<=N; c++) {
+            cin >> block[r][c];
+            if (block[r][c] == 0) {
+                rainbow_blocks.push_back({r, c});
             }
         }
     }
-    play_auto_game();
-    cout << score << endl;
+    
+    auto_play();
+    
+    cout << total_score << endl;
+    
     return 0;
 }
