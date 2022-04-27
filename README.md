@@ -242,3 +242,5 @@ BJ16236 아기 상어 -> https://hwayomingdlog.tistory.com/189
 BJ19236 청소년 상어 -> https://hwayomingdlog.tistory.com/193
 
 BJ23288 주사위 굴리기 2 -> https://hwayomingdlog.tistory.com/317
+
+BJ23290 마법사 상어와 복제 -> 
