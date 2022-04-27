@@ -2,209 +2,213 @@
 //  main.cpp
 //  BJ21611
 //
-//  Created by Hwayeon on 2021/10/15.
+//  Created by 최화연 on 2022/04/27.
 //
 
 #include <iostream>
 #include <vector>
+#include <deque>
 using namespace std;
 
 int N, M;
+int board[50][50] = {0, };
+vector<pair<int, int>> cmd;
+
 int dr[5] = {0, -1, 1, 0, 0};
 int dc[5] = {0, 0, 0, -1, 1};
-int mc[4] = {-1, 0, 1, 0};
-int mr[4] = {0, 1, 0, -1};
-int board[50][50] = {0, };
+int dy[4] = {0, 1, 0, -1};
+int dx[4] = {-1, 0, 1, 0};
+int shark_r, shark_c;
 
-//blizards[i] = {d, s}
-vector<pair<int, int>> blizards;
-vector<vector<pair<int, int>>> beads_group;
-vector<pair<int, int>> beads;
-vector<int> new_beads;
-int shark_r = 0;
-int shark_c = 0;
-int bomb_beads_cnt[4] = {0,};
+int broken_beads[4] = {0, };
 
-void move_beads(){
+void break_beads(int d, int s) {
+    for (int ss=1; ss<=s; ss++) {
+        int r = shark_r + ss*dr[d];
+        int c = shark_c + ss*dc[d];
+        if (board[r][c] == 0) continue;
+        board[r][c] = 0;
+    }
+}
+
+void move_beads() {
     int r = shark_r;
     int c = shark_c;
-    int br = shark_r;
-    int bc = shark_c;
-    int ss = 0;
     int d = 0;
-    for(int s=1; s<=N; s++){
-        for(int i=1; i<=2; i++){
-            ss = s;
-            if(ss == N) ss--;
-            for(int j=1; j<=ss; j++){
-                r += mr[d];
-                c += mc[d];
-                if(board[br][bc] == 0){
-                    board[br][bc] = board[r][c];
+    deque<int> dq;
+    
+    for (int n=1; n<=N; n++) {
+        int nn = n;
+        if (n == N) nn = N-1;
+        for (int i=0; i<2; i++) {
+            for (int j=0; j<nn; j++) {
+                r += dy[d];
+                c += dx[d];
+                if (board[r][c] > 0) {
+                    dq.push_back(board[r][c]);
                     board[r][c] = 0;
                 }
-                br = r;
-                bc = c;
             }
-            if(s == N) return;
+            if (n == N) break;
             d = (d+1)%4;
         }
-    }
-}
-
-int bead_bomb(){
-    beads_group.clear();
-    beads.clear();
-    int r = shark_r;
-    int c = shark_c;
-    int ss = 0;
-    int d = 0;
-    bool check = true;
-    for(int s=1; s<=N; s++){
-        for(int i=1; i<=2; i++){
-            ss = s;
-            if(ss == N) ss--;
-            for(int j=1; j<=ss; j++){
-                r += mr[d];
-                c += mc[d];
-                if(beads.empty()) beads.push_back({r, c});
-                else if(board[beads.back().first][beads.back().second] == board[r][c]){
-                    beads.push_back({r, c});
-                }
-                else{
-                    if(beads.size() >= 4) beads_group.push_back(beads);
-                    beads.clear();
-                    beads.push_back({r, c});
-                }
-            }
-            if(s == N){
-                check = false;
-                break;
-            }
-            d = (d+1)%4;
-        }
-        if(!check) break;
-    }
-    int cnt = 0;
-    for(int i=0; i<beads_group.size(); i++){
-        bomb_beads_cnt[board[beads_group[i].back().first][beads_group[i].back().second]] += beads_group[i].size();
-        cnt += beads_group[i].size();
-        for(int j=0; j<beads_group[i].size(); j++){
-            board[beads_group[i][j].first][beads_group[i][j].second] = 0;
-        }
-    }
-    return cnt;
-}
-
-void change_beads(){
-    beads_group.clear();
-    beads.clear();
-    int r = shark_r;
-    int c = shark_c;
-    int ss = 0;
-    int d = 0;
-    bool check = true;
-    for(int s=1; s<=N; s++){
-        for(int i=1; i<=2; i++){
-            ss = s;
-            if(ss == N) ss--;
-            for(int j=1; j<=ss; j++){
-                r += mr[d];
-                c += mc[d];
-                if(beads.empty()) beads.push_back({r, c});
-                else if(board[beads.back().first][beads.back().second] == board[r][c]){
-                    beads.push_back({r, c});
-                }
-                else{
-                    beads_group.push_back(beads);
-                    beads.clear();
-                    beads.push_back({r, c});
-                }
-            }
-            if(s == N){
-                check = false;
-                break;
-            }
-            d = (d+1)%4;
-        }
-        if(!check) break;
-    }
-    
-    int A = 0;
-    int B = 0;
-    new_beads.clear();
-    for(int i=0; i<beads_group.size(); i++){
-        A = beads_group[i].size();
-        B = board[beads_group[i].back().first][beads_group[i].back().second];
-        new_beads.push_back(A);
-        new_beads.push_back(B);
     }
     
     r = shark_r;
     c = shark_c;
-    ss = 0;
     d = 0;
-    int k = 0;
-    check = true;
-    for(int s=1; s<=N; s++){
-        for(int i=1; i<=2; i++){
-            ss = s;
-            if(ss == N) ss--;
-            for(int j=1; j<=ss; j++){
-                r += mr[d];
-                c += mc[d];
-                if(k >= new_beads.size()) board[r][c] = 0;
-                else board[r][c] = new_beads[k];
-                k++;
+    for (int n=1; n<=N; n++) {
+        int nn = n;
+        if (n == N) nn = N-1;
+        for (int i=0; i<2; i++) {
+            for (int j=0; j<nn; j++) {
+                r += dy[d];
+                c += dx[d];
+                if (dq.empty()) return;
+                board[r][c] = dq.front();
+                dq.pop_front();
             }
-            if(s == N){
-                check = false;
-                break;
-            }
+            if (n == N) return;
             d = (d+1)%4;
         }
-        if(!check) break;
     }
 }
 
-void play_blizards(){
-    for(int i=0; i<M; i++){
-        //1. 블리자드 시전
-        for(int s=blizards[i].second; s>=1; s--){
-            int br = shark_r + dr[blizards[i].first]*s;
-            int bc = shark_c + dc[blizards[i].first]*s;
-            board[br][bc] = 0;
+bool explode_beads() {
+    int r = shark_r;
+    int c = shark_c;
+    int d = 0;
+    bool check = false;
+    deque<pair<int, int>> dq;
+    
+    for (int n=1; n<=N; n++) {
+        int nn = n;
+        if (n == N) nn = N-1;
+        for (int i=0; i<2; i++) {
+            for (int j=0; j<nn; j++) {
+                r += dy[d];
+                c += dx[d];
+                if (dq.empty() || board[dq.front().first][dq.front().second] == board[r][c]) {
+                    dq.push_back({r, c});
+                }
+                else {
+                    if (dq.size() >= 4) {
+                        check = true;
+                        broken_beads[board[dq.front().first][dq.front().second]] += dq.size();
+                        while (!dq.empty()) {
+                            int rr = dq.front().first;
+                            int cc = dq.front().second;
+                            dq.pop_front();
+                            board[rr][cc] = 0;
+                        }
+                    }
+                    dq.clear();
+                    dq.push_back({r, c});
+                }
+            }
+            if (n == N) break;
+            d = (d+1)%4;
         }
-        //2. 구슬 이동
-        for(int j=0; j<=blizards[i].second; j++) move_beads();
-        //3. 구슬 폭발
-        int cnt = bead_bomb();
-        //4. 구슬 이동
-        while(cnt > 0){
-            for(int j=1; j<=cnt; j++) move_beads();
-            cnt = bead_bomb();
+    }
+    
+    return check;
+}
+
+void change_beads() {
+    int r = shark_r;
+    int c = shark_c;
+    int d = 0;
+    deque<pair<int, int>> dq;
+    deque<int> new_beads;
+    
+    for (int n=1; n<=N; n++) {
+        int nn = n;
+        if (n == N) nn = N-1;
+        for (int i=0; i<2; i++) {
+            for (int j=0; j<nn; j++) {
+                r += dy[d];
+                c += dx[d];
+                if (dq.empty() || board[dq.front().first][dq.front().second] == board[r][c]) {
+                    dq.push_back({r, c});
+                }
+                else {
+                    new_beads.push_back(dq.size());
+                    new_beads.push_back(board[dq.front().first][dq.front().second]);
+                    dq.clear();
+                    dq.push_back({r, c});
+                }
+            }
+            if (n == N) break;
+            d = (d+1)%4;
         }
-        //5. 구슬 변화
+    }
+    
+    r = shark_r;
+    c = shark_c;
+    d = 0;
+    
+    for (int n=1; n<=N; n++) {
+        int nn = n;
+        if (n == N) nn = N-1;
+        for (int i=0; i<2; i++) {
+            for (int j=0; j<nn; j++) {
+                r += dy[d];
+                c += dx[d];
+                if (!new_beads.empty()) {
+                    board[r][c] = new_beads.front();
+                    new_beads.pop_front();
+                }
+                else {
+                    board[r][c] = 0;
+                }
+            }
+            if (n == N) break;
+            d = (d+1)%4;
+        }
+    }
+}
+
+void blizard() {
+    for(int i=0; i<M; i++) {
+        //1. 구슬 파괴하기
+        break_beads(cmd[i].first, cmd[i].second);
+        
+        //2. 구슬 이동하기
+        move_beads();
+        
+        //3. 구슬 폭발하기
+        bool check = explode_beads();
+        
+        while (check) {
+            move_beads();
+            check = explode_beads();
+        }
+        
+        //4. 구슬 변화하기
         change_beads();
     }
+    
 }
 
 int main(int argc, const char * argv[]) {
     cin >> N >> M;
-    for(int r=1; r<=N; r++){
-        for(int c=1; c<=N; c++){
+    for (int r=1; r<=N; r++) {
+        for (int c=1; c<=N; c++) {
             cin >> board[r][c];
         }
     }
-    for(int i=0; i<M; i++){
+    
+    for (int m=0; m<M; m++) {
         int d, s;
         cin >> d >> s;
-        blizards.push_back({d, s});
+        cmd.push_back({d, s});
     }
+    
     shark_r = (N+1)/2;
     shark_c = (N+1)/2;
-    board[shark_r][shark_c] = -1;
-    play_blizards();
-    cout << 1*bomb_beads_cnt[1] + 2*bomb_beads_cnt[2] + 3* bomb_beads_cnt[3] << endl;
+    blizard();
+    
+    cout << broken_beads[1] + 2*broken_beads[2] + 3*broken_beads[3] << endl;
+    
     return 0;
 }
