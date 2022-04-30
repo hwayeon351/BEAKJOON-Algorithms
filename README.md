@@ -245,4 +245,4 @@ BJ23288 주사위 굴리기 2 -> https://hwayomingdlog.tistory.com/317
 
 BJ23290 마법사 상어와 복제 -> https://hwayomingdlog.tistory.com/318
 
-BJ23289 온풍기 안녕! -> 
+BJ23289 온풍기 안녕! -> https://hwayomingdlog.tistory.com/319
